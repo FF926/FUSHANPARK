@@ -51,17 +51,3 @@ html {
   border-radius: 0;
   transition: opacity 0.3s;
 }
-
-/* header 按钮 */
-.h-btn {
-  border: 1px solid var(--vt-c-green-glow);
-  box-shadow: 0px 0px 6px 3px var(--vt-c-green-glow) inset;
-  border-radius: 5px;
-  padding: 5px 12px;
-  cursor: pointer;
-  transition: 0.5s;
-}
-.h-btn:hover {
-  background-color: #00befe2d;
-  box-shadow: 0px 0px 6px 3px var(--charts-green) inset;
-}

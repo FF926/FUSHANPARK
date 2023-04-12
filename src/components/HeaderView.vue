@@ -2,7 +2,7 @@
  * @Author: error: git config user.name && git config user.email & please set dead value or install git
  * @Date: 2022-11-21 16:19:30
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-12 11:57:00
+ * @LastEditTime: 2023-04-12 14:28:28
  * @FilePath: \ace-firefly\src\components\HeaderView.vue
  * @Description: 
  * 
@@ -62,9 +62,8 @@ function isFullscreen(): boolean {
     <div class="title">
       {{ title }}
     </div>
-    <div class="item home h-btn">
+    <div class="item home h-btn" title="返回首页">
       <span class="icon"></span>
-      <a class="label">返回</a>
     </div>
     <div class="item full-size h-btn" title="全屏" @click="setFullScreen()">
       <span class="icon"></span>
@@ -75,54 +74,58 @@ function isFullscreen(): boolean {
 <style scoped lang="scss">
 $greenGlow: #21f3e2;
 .header {
+  position: relative;
+  display: inline-flex;
   height: 100%;
   width: 100%;
-  display: inline-flex;
-  flex-direction: row;
   background-image: url('../assets/images/header.png');
   background-size: 100% 100%;
   background-repeat: no-repeat;
+  flex-direction: row;
+  align-items: center;
+  justify-content: flex-end;
   color: white;
   cursor: default;
   font-family: txw;
-  align-items: center;
-  justify-content: flex-end;
 }
 .header .item {
   display: flex;
   align-items: center;
+  margin: 0 12px;
   .label {
     font-size: 15px;
   }
 }
-
-.full-size {
-  right: 170px;
+.title {
+  position: absolute;
+  left: 5rem;
+  font-family: txw;
+  font-size: 27px;
+  color: white;
+  text-shadow: 0 0 7px $greenGlow;
+  letter-spacing: 14px;
+}
+.h-btn {
+  cursor: pointer;
+  transition: 0.2s;
+}
+.h-btn:hover {
+  transform: scale(1.2);
 }
 .icon {
   display: inline-block;
   background-size: 100% 100%;
   background-repeat: no-repeat;
-  width: 25px;
-  height: 25px;
   margin-right: 5px;
 }
 .home .icon {
-  background-image: url('../assets/images/home-icon.png');
+  background-image: url('../assets/images/icon/home.svg');
+  width: 25px;
+  height: 25px;
 }
 .full-size .icon {
-  margin-right: 0;
-  background-image: url('../assets/images/full-icon.png');
-}
-.title {
-  position: absolute;
-  left: 2rem;
-  font-family: txw;
-  font-size: 27px;
-  color: white;
-  text-shadow: 0 0 7px $greenGlow;
-}
-.clock {
-  margin-right: 3rem;
+  background-image: url('../assets/images/icon/full-size.svg');
+  width: 23px;
+  height: 23px;
 }
 </style>
