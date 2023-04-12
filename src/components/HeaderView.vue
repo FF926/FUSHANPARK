@@ -2,7 +2,7 @@
  * @Author: error: git config user.name && git config user.email & please set dead value or install git
  * @Date: 2022-11-21 16:19:30
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-12 14:28:28
+ * @LastEditTime: 2023-04-12 15:39:16
  * @FilePath: \ace-firefly\src\components\HeaderView.vue
  * @Description: 
  * 
@@ -12,7 +12,7 @@
 import { ref } from 'vue'
 import DigitalClock from './DigitalClock.vue'
 
-const title = ref('无人机巡检')
+const title = ref('浮山公园无人机智慧防火平台')
 
 // 网页全屏 开关
 function setFullScreen() {
@@ -86,7 +86,6 @@ $greenGlow: #21f3e2;
   justify-content: flex-end;
   color: white;
   cursor: default;
-  font-family: txw;
 }
 .header .item {
   display: flex;
@@ -98,12 +97,12 @@ $greenGlow: #21f3e2;
 }
 .title {
   position: absolute;
-  left: 5rem;
+  left: 1.5rem;
+  letter-spacing: 4px;
+  font-size: 25px;
   font-family: txw;
-  font-size: 27px;
   color: white;
   text-shadow: 0 0 7px $greenGlow;
-  letter-spacing: 14px;
 }
 .h-btn {
   cursor: pointer;
