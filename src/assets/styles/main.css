@@ -1,0 +1,67 @@
+@import './base.css';
+
+#app,
+body,
+html {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  margin: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+#app {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*---滚动条默认显示样式--*/
+::-webkit-scrollbar-thumb {
+  visibility: visible;
+  background-color: rgba(43, 88, 132, 0.78);
+  height: 50px;
+  outline-offset: -2px;
+  outline: none;
+  border-radius: 4px;
+  border: 1px solid rgba(43, 118, 158, 0.4);
+}
+
+/*---鼠标点击滚动条显示样式--*/
+::-webkit-scrollbar-thumb:hover {
+  visibility: visible;
+  background-color: rgb(150, 220, 233);
+  height: 50px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+/*---滚动条大小--*/
+::-webkit-scrollbar {
+  visibility: visible;
+  width: 8px;
+  height: 8px;
+}
+
+/*---滚动框背景样式--*/
+::-webkit-scrollbar-track-piece {
+  visibility: visible;
+  background-color: transparent;
+  border-radius: 0;
+  transition: opacity 0.3s;
+}
+
+/* header 按钮 */
+.h-btn {
+  border: 1px solid var(--vt-c-green-glow);
+  box-shadow: 0px 0px 6px 3px var(--vt-c-green-glow) inset;
+  border-radius: 5px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: 0.5s;
+}
+.h-btn:hover {
+  background-color: #00befe2d;
+  box-shadow: 0px 0px 6px 3px var(--charts-green) inset;
+}

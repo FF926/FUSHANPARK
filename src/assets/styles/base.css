@@ -1,0 +1,55 @@
+/* color palette from <https://github.com/vuejs/theme> */
+:root {
+  --vt-c-white: #ffffff;
+  --vt-c-bk-main: #04123f;
+  --vt-c-white-soft: #f8f8f8;
+  --vt-c-white-mute: #f2f2f2;
+
+  --vt-c-black: #181818;
+  --vt-c-black-soft: #222222;
+  --vt-c-black-mute: #282828;
+
+  --vt-c-indigo: #2c3e50;
+  --vt-c-blue: #0f5491;
+  --vt-c-green-glow: #21f3e28c;
+
+  --charts-blue: #00bffe;
+  --charts-green: #47dbe7;
+  --charts-green2: #00ffbf;
+  --charts-green3: #00dd8a;
+  --charts-green4: #94d84d;
+  --charts-yellow: #fff101;
+  --charts-yellow2: #edbc14;
+  --charts-purple: #7373ff;
+  --charts-gray: #eeeeee;
+  --charts-gray2: #ecffff;
+  --charts-black1: #5c6063;
+
+  --side-width: 360px;
+  --header-height: 55px;
+}
+
+:root {
+  --color-background: var(--vt-c-bk-main);
+  --color-text: var(--vt-c-text-light-1);
+}
+
+body {
+  color: var(--color-text);
+  background-image: url('../images/background.png');
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+@font-face {
+  font-family: 'SupermolotLight';
+  src: url('../fonts/SupermolotLight.woff.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'txw';
+  src: url('../fonts/txw.ttf');
+  font-weight: normal;
+  font-style: normal;
+}
