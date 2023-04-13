@@ -2,7 +2,7 @@
  * @Author: error: git config user.name && git config user.email & please set dead value or install git
  * @Date: 2022-11-21 16:19:30
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-12 10:06:41
+ * @LastEditTime: 2023-04-13 16:25:29
  * @FilePath: \ace-firefly\src\components\MainMap.vue
  * @Description: 
  * 
@@ -104,7 +104,7 @@ function popupClose() {
 @import url('../assets/styles/ol-popup.css');
 .ol-map,
 #ol-map-container {
-  position: absolute;
+  position: relative;
   height: 100%;
   width: 100%;
 }
