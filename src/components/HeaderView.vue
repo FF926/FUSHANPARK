@@ -1,17 +1,24 @@
 <!--
  * @Author: error: git config user.name && git config user.email & please set dead value or install git
  * @Date: 2022-11-21 16:19:30
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-12 15:39:16
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-04-13 13:26:20
  * @FilePath: \ace-firefly\src\components\HeaderView.vue
  * @Description: 
  * 
  * Copyright (c) 2022 by error: git config user.name && git config user.email & please set dead value or install git, All Rights Reserved. 
 -->
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import DigitalClock from './DigitalClock.vue'
-
+import { CalendarOutlined } from '@ant-design/icons-vue'
+import PlanTask from '../components/PlanTask/index.vue'
+import { FALSE } from 'ol/functions'
+const task = ref<InstanceType<typeof PlanTask>>() //泛类型   <typeof>
+/* 开启弹窗 */
+const handleTask = () => {
+  task.value.visible = !task.value?.visible
+}
 const title = ref('浮山公园无人机智慧防火平台')
 
 // 网页全屏 开关
@@ -62,14 +69,16 @@ function isFullscreen(): boolean {
     <div class="title">
       {{ title }}
     </div>
+    <CalendarOutlined @click="handleTask" :style="{ fontSize: '24px', color: '#47dbe7' }" class="item h-btn" />
     <div class="item home h-btn" title="返回首页">
       <span class="icon"></span>
     </div>
     <div class="item full-size h-btn" title="全屏" @click="setFullScreen()">
       <span class="icon"></span>
     </div>
-    <DigitalClock />
+    <DigitalClock class="item h-btn" />
   </div>
+  <PlanTask ref="task"/>
 </template>
 <style scoped lang="scss">
 $greenGlow: #21f3e2;

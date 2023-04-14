@@ -1,8 +1,8 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2022-11-21 16:19:30
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-12 16:24:19
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-04-13 11:06:38
  * @FilePath: \ace-firefly\src\views\HomeView.vue
  * @Description: 
  * 
@@ -17,7 +17,6 @@ import MainMap from '../components/MainMap.vue'
 
 export type stateTypes = 'live' | 'warn' | 'manage'
 let curState = ref<stateTypes>('warn')
-
 function liveStart() {
   curState.value = 'live'
 }
@@ -65,9 +64,9 @@ main {
   bottom: 0;
   z-index: 999;
   display: inline-flex;
-  border: 1px solid white;
+  border: 1px solid rgb(54, 83, 87);
   &.left {
-    background: linear-gradient(90deg, #043f5d, #f50404c9);
+    background: linear-gradient(90deg, #043f5d, #08455e);
     left: 0;
     border-radius: 0px 80% 80% 0px;
 
@@ -80,7 +79,7 @@ main {
   }
   &.right {
     right: 0;
-    background: linear-gradient(-90deg, black, #9b3838);
+    background: linear-gradient(-90deg, #043f5d, #08455e);
     border-radius: 80% 0px 0px 80%;
   }
   .content {
