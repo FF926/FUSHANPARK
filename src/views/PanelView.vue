@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 09:19:55
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-14 10:18:46
+ * @LastEditTime: 2023-04-14 13:43:22
  * @FilePath: \ace-firefly\src\views\PanelView.vue
  * @Description: 
  * 
@@ -25,11 +25,16 @@
       <PanelManage />
     </div>
   </div>
+  <div :class="['my-dialog', { active: props.state === 'live' }]">
+    <div class="dialog-title">视频直播</div>
+    <PanelLive />
+  </div>
 </template>
 
 <script setup lang="ts">
 import PanelWarn from '../components/PanelWarn.vue'
 import PanelManage from '../components/PanelManage.vue'
+import PanelLive from '../components/PanelLive.vue'
 import type { stateTypes } from '@/views/HomeView.vue'
 
 const props = defineProps<{
@@ -45,6 +50,7 @@ function arcClick(params: stateTypes) {
 }
 </script>
 <style scoped lang="scss">
+$hideWidth: -26%;
 .active {
   &.left {
     left: 0 !important;
@@ -55,17 +61,17 @@ function arcClick(params: stateTypes) {
 }
 .panel {
   position: absolute;
-  width: 25%;
+  width: 30%;
   height: 98%;
   z-index: 1;
   top: 0;
   display: inline-flex;
   transition: 0.3s;
   &.left {
-    left: -22%;
+    left: $hideWidth;
   }
   &.right {
-    right: -22%;
+    right: $hideWidth;
   }
 }
 .content {
@@ -73,6 +79,7 @@ function arcClick(params: stateTypes) {
   height: 100%;
   background-color: #00629b;
   position: relative;
+  overflow: auto;
 }
 .arc {
   width: 20%;
@@ -119,5 +126,25 @@ function arcClick(params: stateTypes) {
   margin-left: 5rem;
   margin-top: 12px;
   border-radius: 5px;
+}
+.my-dialog {
+  display: none;
+  position: absolute;
+  width: 25%;
+  height: 60%;
+  left: 8%;
+  top: 2rem;
+  background-color: #023d5ecc;
+  box-shadow: 0px 0px 10px 5px #00000094;
+  border: 1px solid #64a7ab75;
+
+  &.active {
+    display: block;
+  }
+}
+.dialog-title {
+  font-size: 22px;
+  font-weight: lighter;
+  padding: 3px;
 }
 </style>

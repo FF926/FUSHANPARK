@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-12 09:20:07
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-14 10:08:12
+ * @LastEditTime: 2023-04-14 13:17:55
  * @FilePath: \ace-firefly\src\views\HomeView.vue
  * @Description: 
  * 
@@ -29,7 +29,7 @@ import PanelView from './PanelView.vue'
 export type stateTypes = 'live' | 'warn' | 'manage'
 let curState = ref<stateTypes>('warn')
 
-function arcClick(state: stateTypes) {
+function switchState(state: stateTypes) {
   curState.value = state
 }
 </script>
@@ -42,9 +42,9 @@ function arcClick(state: stateTypes) {
     <div class="map-box">
       <MainMap />
     </div>
-    <PanelView :state="curState" @arc-click="arcClick" />
+    <PanelView :state="curState" @arc-click="switchState" />
   </main>
-  <FooterView :state="curState" @live-start="arcClick('live')" />
+  <FooterView :state="curState" @live-start="switchState('live')" />
 </template>
 <style scoped lang="scss">
 .header-box {

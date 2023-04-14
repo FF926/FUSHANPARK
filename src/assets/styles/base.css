@@ -53,3 +53,28 @@ body {
   font-weight: normal;
   font-style: normal;
 }
+
+/* element-plus 样式修改 */
+.el-table {
+  --el-table-header-text-color: #e6edff;
+  --el-table-header-bg-color: #0000005e;
+  --el-table-text-color: #ffffff;
+  --el-table-row-hover-bg-color: #41b3cd;
+}
+html.dark {
+  --el-text-color-regular: #ffffff;
+  --el-border-color: #c5c5c5;
+  --el-text-color-placeholder: #e9e9e9;
+}
+.el-input {
+  --el-input-hover-border-color: #00c9ff;
+}
+.el-select {
+  --el-select-border-color-hover: #00c9ff;
+}
+.el-dialog {
+  --el-dialog-bg-color: #00629b;
+}
+.el-dialog__close {
+  color: #ffffff !important;
+}
