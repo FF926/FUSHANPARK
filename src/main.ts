@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-10 16:52:33
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-12 09:23:02
+ * @LastEditTime: 2023-04-14 10:35:23
  * @FilePath: \ace-firefly\src\main.ts
  * @Description:
  *
@@ -10,7 +10,11 @@
  */
 import { createApp } from 'vue'
 import App from './App.vue'
-
+import ElementPlus from 'element-plus'
+import 'element-plus/dist/index.css'
 import './assets/styles/main.css'
 
-createApp(App).mount('#app')
+const app = createApp(App)
+
+app.use(ElementPlus)
+app.mount('#app')

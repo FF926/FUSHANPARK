@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2022-11-24 15:21:24
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-12 10:14:08
+ * @LastEditTime: 2023-04-14 10:24:54
  * @FilePath: \ace-firefly\src\components\module\MainMap.ts
  * @Description:
  *
@@ -31,7 +31,9 @@ export default class MainMap {
       target: ele,
       view: new OL.prototype.View.default({
         center: this.center,
-        zoom: 15
+        zoom: 15,
+        maxZoom: 18,
+        minZoom: 6
       }),
       controls: OL.prototype.Controls.defaults({
         attribution: false,
