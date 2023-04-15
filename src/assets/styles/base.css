@@ -75,6 +75,9 @@ html.dark {
 .el-dialog {
   --el-dialog-bg-color: #00629b;
 }
+.el-message-box  {
+  background-color: #00629b;
+}
 .el-dialog__close {
   color: #ffffff !important;
 }

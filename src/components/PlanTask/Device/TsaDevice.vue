@@ -1,24 +1,32 @@
 <template>
-  <a-modal title="航线计划" :width="500" v-if="true" :footer="null">
+  <a-modal
+    class="my-modal"
+    title="在线设备"
+    :width="500"
+    v-model:visible="tsaVisible"
+    :bodyStyle="{ padding: '10px', backgroundColor: '#232323' }"
+    :footer="null"
+  >
     <div class="project-tsa-wrapper">
-      <div>
+      <!-- 用户名 -->
+      <!-- <div>
         <a-row>
           <a-col :span="1"></a-col>
-          <a-col :span="11">My Username</a-col>
           <a-col :span="11" align="right" style="font-weight: 700">{{ username }}</a-col>
           <a-col :span="1"></a-col>
         </a-row>
-      </div>
-      <div class="scrollbar" :style="{ height: scorllHeight + 'px' }">
+      </div> -->
+      <div class="scrollbar" :style="{ height: 600 + 'px' }">
         <a-collapse
           :bordered="false"
           expandIconPosition="right"
           accordion
           style="background: #232323"
+          :activeKey="EDeviceTypeName.Dock"
         >
           <a-collapse-panel
             :key="EDeviceTypeName.Dock"
-            header="Dock"
+            header="机场"
             style="border-bottom: 1px solid #4f4f4f"
           >
             <div v-if="onlineDocks.data.length === 0" style="height: 150px; color: white">
@@ -352,10 +360,11 @@
           expandIconPosition="right"
           accordion
           style="background: #232323"
+          :activeKey="EDeviceTypeName.Aircraft"
         >
           <a-collapse-panel
             :key="EDeviceTypeName.Aircraft"
-            header="Online Devices"
+            header="在线设备"
             style="border-bottom: 1px solid #4f4f4f"
           >
             <div v-if="onlineDevices.data.length === 0" style="height: 150px; color: white">
@@ -502,7 +511,6 @@ const username = ref(localStorage.getItem(ELocalStorageKey.Username))
 const workspaceId = ref(localStorage.getItem(ELocalStorageKey.WorkspaceId)!)
 const osdVisible = ref({} as OSDVisible)
 const hmsVisible = new Map<string, boolean>()
-const scorllHeight = ref()
 
 interface OnlineDevice {
   model: string
@@ -556,7 +564,6 @@ onMounted(() => {
   }, 3000)
   const element = document.getElementsByClassName('scrollbar').item(0) as HTMLDivElement
   const parent = element?.parentNode as HTMLDivElement
-  scorllHeight.value = parent?.clientHeight - parent?.firstElementChild?.clientHeight
 })
 
 function getOnlineTopo() {
@@ -652,14 +659,32 @@ function readHms(visiable: boolean, sn: string) {
     })
   }
 }
+/* 控制是否显示 */
+const tsaVisible = ref<boolean>()
+defineExpose({
+  tsaVisible
+})
 </script>
 
 <style lang="scss">
+.my-modal {
+  .ant-modal-header {
+    background-color: #232323;
+    border-bottom: 2px solid #222;
+    .ant-modal-title {
+      color: #fff;
+    }
+  }
+  .ant-collapse > .ant-collapse-item > .ant-collapse-header {
+    color: white !important;
+    border: 0;
+    padding-left: 14px;
+  }
+}
 .project-tsa-wrapper > :first-child {
   height: 50px;
   line-height: 50px;
   align-items: center;
-  border-bottom: 1px solid #4f4f4f;
 }
 .project-tsa-wrapper {
   height: 100%;
@@ -669,11 +694,6 @@ function readHms(visiable: boolean, sn: string) {
   ::-webkit-scrollbar {
     display: none;
   }
-}
-.ant-collapse > .ant-collapse-item > .ant-collapse-header {
-  color: white;
-  border: 0;
-  padding-left: 14px;
 }
 
 .text-hidden {

@@ -280,11 +280,14 @@ defineExpose({
     color: #fff;
     }
   }
+  .ant-modal-close{
+    color: #fff;
+  }
 }
 
 .create-plan-wrapper {
   background-color: #232323;
-  color: fff;
+  color: #fff;
   padding-bottom: 0;
   height: 70vh;
   display: flex;
