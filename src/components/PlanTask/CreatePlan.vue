@@ -4,7 +4,7 @@
     title="创建航线计划"
     :width="400"
     v-model:visible="planVisible"
-    :bodyStyle="{ padding: '10px',  backgroundColor: '#232323'}"
+    :bodyStyle="{ padding: '10px', backgroundColor: '#232323' }"
     :footer="null"
   >
     <div class="create-plan-wrapper">
@@ -135,7 +135,8 @@
     </div>
     <div
       v-if="drawerVisible"
-      style="position: absolute;
+      style="
+        position: absolute;
         left: 330px;
         width: 280px;
         height: 100vh;
@@ -271,13 +272,13 @@ defineExpose({
 })
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .my-modal {
   .ant-modal-header {
     background-color: #232323;
-    border-bottom:2px solid #222;
-    .ant-modal-title{
-    color: #fff;
+    border-bottom: 2px solid #222;
+    .ant-modal-title {
+      color: #fff;
     }
   }
 }

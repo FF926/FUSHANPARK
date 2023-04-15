@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2022-11-24 09:59:39
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-12 09:49:02
+ * @LastEditTime: 2023-04-14 16:32:46
  * @FilePath: \ace-firefly\src\extensions\OLConfig.ts
  * @Description:
  *
@@ -10,7 +10,8 @@
  */
 import * as OL from './OLPrototypes'
 export { OL as prototype }
-const tdtToken = '2fcdd233b40cfd6d876c2e766d39d45e'
+// 个人的，以后换公司的
+const tdtToken = '801160e0e4ef099e50879e3b4647ef3d'
 
 // 所有基础图层类型
 export type BaseLayerTypes = 'OSMLayer' | 'ESRIStreethBlue' | 'TDTStreet' | 'TDTImage' | ''
