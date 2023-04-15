@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2022-11-24 15:21:24
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-14 10:24:54
+ * @LastEditTime: 2023-04-15 14:15:23
  * @FilePath: \ace-firefly\src\components\module\MainMap.ts
  * @Description:
  *
@@ -13,6 +13,9 @@ import * as OL from '@/extensions/OLConfig'
 export default class MainMap {
   map: OL.prototype.Map.default
   center = OL.prototype.Proj.fromLonLat([120.4347, 36.0881], 'EPSG:3857')
+
+  baseLayer: OL.BaseLayerTypes = 'TDTImage'
+
   layers = () => {
     return this.map
       .getAllLayers()
@@ -27,7 +30,7 @@ export default class MainMap {
   }
   constructor(ele: string) {
     this.map = new OL.prototype.Map.default({
-      layers: OL.getOLBaseLayer('TDTImage'),
+      layers: OL.getOLBaseLayer(this.baseLayer),
       target: ele,
       view: new OL.prototype.View.default({
         center: this.center,
@@ -48,9 +51,30 @@ export default class MainMap {
     ;(window as any).olmap = this.map
   }
 
+  /**
+   * 替换基础底图
+   */
+  public switchBaseLayer() {
+    const inLayer = this.baseLayer === 'TDTImage' ? 'TDTStreet' : 'TDTImage'
+
+    const baseLayer = this.map
+      .getLayers()
+      .getArray()
+      .filter((layer) => layer.get('type') === 'base')
+    baseLayer.forEach((layer) => {
+      this.map.removeLayer(layer)
+    })
+
+    const inBase = OL.getOLBaseLayer(inLayer)
+    inBase.forEach((layer, idx) => {
+      this.map.getLayers().insertAt(idx, layer)
+    })
+    this.baseLayer = inLayer
+  }
+
   reset() {
     this.map.getView().animate({
-      zoom: 10,
+      zoom: 15,
       duration: 600,
       center: this.center
     })
