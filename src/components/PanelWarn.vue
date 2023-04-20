@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-04-18 16:18:52
+ * @LastEditTime: 2023-04-20 09:14:24
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -164,14 +164,13 @@ function selectAll() {
 }
 
 function doDelete() {
-  ElMessageBox.confirm('确认删除选中的图片？')
+  ElMessageBox.confirm('确认删除选中的信息？')
     .then(() => {
       console.log(multipleTableRef.value!.getSelectionRows())
-
-      alert('删除成功')
+      ElMessage({ type: 'success', message: '删除成功' })
     })
     .catch(() => {
-      alert('已取消')
+      ElMessage('取消')
     })
 }
 const onSubmit = () => {
