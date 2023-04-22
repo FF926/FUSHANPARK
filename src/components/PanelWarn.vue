@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-04-22 17:15:45
+ * @LastEditTime: 2023-04-22 17:49:52
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -10,18 +10,17 @@
 -->
 <!--  -->
 <template>
-  <div class="main-box">
+  <div class="main-box" ref="refPanelManage">
     <el-form class="my-form" :model="form1" label-width="120px">
-      <el-form-item label="时间范围">
+      <!-- <el-form-item label="时间范围">
         <el-date-picker v-model="form1.date" type="datetimerange" placeholder="请选择" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" @click="selectAll">全选</el-button>
-        <el-button type="danger" @click="doDelete">删除</el-button>
-        <el-button type="danger" @click="getWarnings">删除</el-button>
+        <el-button type="danger" @click="deleteWarnInfo">删除</el-button>
       </el-form-item>
     </el-form>
-    <el-table ref="multipleTableRef" :data="warninginfo" style="width: 100%">
+    <el-table ref="multipleTableRef" :height="domHeight" :data="warninginfo" style="width: 100%">
       <el-table-column type="selection" width="26" />
       <el-table-column align="center" type="index" width="55" label="序号" />
       <el-table-column align="center" prop="create_time" width="150" label="预警时间" />
@@ -29,9 +28,13 @@
       <el-table-column align="center" prop="latitude" width="98" label="纬度" />
       <el-table-column prop="status" width="105" label="处理状态">
         <template #default="{ row }">
-          <el-select v-model="row.status" :disabled="row.status ? true : false">
+          <el-select
+            v-model="row.status"
+            @change="updateStatus(row)"
+            :disabled="row.status ? true : false"
+          >
             <el-option label="已处理" :value="3"></el-option>
-            <el-option label="误报" :value="2" ></el-option>
+            <el-option label="误报" :value="2"></el-option>
             <el-option label="未处理" :value="0"></el-option>
           </el-select>
         </template>
@@ -63,8 +66,9 @@
 
 <script setup lang="ts">
 import { reactive, ref, onMounted } from 'vue'
-import { getWarnList } from '@/api/project'
+import { getWarnList, deleteWarn, updateWarnStatus } from '@/api/project'
 import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
+import { message } from 'ant-design-vue'
 
 // const centerDialogVisible = ref(true)
 // function isProcess() {
@@ -131,51 +135,6 @@ interface WarningInfo {
   height: string
 }
 const warninginfo = ref([] as WarningInfo[])
-const tableData = [
-  {
-    time: '2016-05-03 18:35:00',
-    coordinate: '112.366633,30.3366633',
-    processingStatus: 0, //0 未处理 1 已处理
-    isFalse: '是'
-  },
-  {
-    time: '2016-05-03 18:35:00',
-    coordinate: '112.366633,30.3366633',
-    processingStatus: 1, //0 未处理 1 已处理
-    isFalse: '是'
-  },
-  {
-    time: '2016-05-03 18:35:00',
-    coordinate: '112.366633,30.3366633',
-    processingStatus: 0, //0 未处理 1 已处理
-    isFalse: '是'
-  },
-  {
-    time: '2016-05-03 18:35:00',
-    coordinate: '112.366633,30.3366633',
-    processingStatus: 1, //0 未处理 1 已处理
-    isFalse: '是'
-  },
-  {
-    time: '2016-05-03 18:35:00',
-    coordinate: '112.366633,30.3366633',
-    processingStatus: 1, //0 未处理 1 已处理
-    isFalse: '是'
-  },
-  {
-    time: '2016-05-03 18:35:00',
-    coordinate: '112.366633,30.3366633',
-    processingStatus: 0, //0 未处理 1 已处理
-    isFalse: '是'
-  },
-  {
-    time: '2016-05-03 18:35:00',
-    coordinate: '112.366633,30.3366633',
-    processingStatus: 0, //0 未处理 1 已处理
-    isFalse: '是'
-  }
-]
-
 // do not use same name with ref
 const form1 = reactive({
   date: ''
@@ -185,24 +144,12 @@ const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 function selectAll() {
   multipleTableRef.value!.toggleAllSelection()
 }
-function Search() {
-  console.log('查询')
-  const data = getWarnList({ page: 1, page_size: 10 })
-  console.log(data)
-}
-function doDelete() {
-  ElMessageBox.confirm('确认删除选中的信息？')
-    .then(() => {
-      console.log(multipleTableRef.value!.getSelectionRows())
-      ElMessage({ type: 'success', message: '删除成功' })
-    })
-    .catch(() => {
-      ElMessage('取消')
-    })
-}
+const refPanelManage = ref<HTMLDivElement>()
+const domHeight = ref(0)
+
 onMounted(() => {
   getWarnings()
-  // domHeight.value = refPanelManage.value?.offsetHeight! - 200
+  domHeight.value = refPanelManage.value?.offsetHeight! + 450
 })
 
 async function doGetWarnList(params: any) {
@@ -229,6 +176,42 @@ function getWarnings() {
 }
 function handleCurrentChange() {
   getWarnings()
+}
+/* 状态更新 */
+function updateStatus(row: any) {
+  console.log(row)
+
+  const body = {
+    status: row.status,
+    id: row.id
+  }
+  updateWarnStatus(body).then((res) => {
+    if (res.code == 0) {
+      message.success('状态更新成功')
+      getWarnings()
+    } else {
+      message.error('状更新失败')
+    }
+  })
+}
+/* 删除信息 */
+function deleteWarnInfo() {
+  ElMessageBox.confirm('确认删除选中的信息？')
+    .then(() => {
+      console.log(multipleTableRef.value!.getSelectionRows())
+      const body = {
+        id: multipleTableRef.value!.getSelectionRows()[0].id
+      }
+      deleteWarn(body).then((res) => {
+        if (res.code == 0) {
+          ElMessage({ type: 'success', message: '删除成功' })
+          getWarnings()
+        }
+      })
+    })
+    .catch(() => {
+      ElMessage('取消')
+    })
 }
 </script>
 <style scoped lang="scss">
