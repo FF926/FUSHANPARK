@@ -9,7 +9,7 @@
     <p class="fz24">请选择直播源</p>
     <div class="flex-row flex-justify-center flex-align-center mt10">
       <template v-if="liveState && isDockLive">
-        <span class="mr10">Lens:</span>
+        <span class="mr10" style="color:white">请选择镜头:</span>
         <a-radio-group v-model:value="lensSelected" button-style="solid">
           <a-radio-button v-for="lens in lensList" :key="lens" :value="lens">{{lens}}</a-radio-button>
         </a-radio-group>
@@ -45,7 +45,7 @@
       </a-select>
       <a-select
         class="ml10"
-        style="width:150px"
+        style="width:150px;"
         placeholder="请选择镜头"
         v-model:value="cameraSelected"
       >
@@ -96,7 +96,7 @@
       </p>
     </div>
     <div class="mt10 flex-row flex-justify-center flex-align-center">
-      <a-button v-if="liveState && isDockLive" type="primary" large @click="onSwitch">请选择镜头</a-button>
+      <a-button v-if="liveState && isDockLive" type="primary" large @click="onSwitch">点击切换镜头</a-button>
       <a-button v-else type="primary" large @click="onStart">播放</a-button>
       <a-button class="ml20" type="primary" large @click="onStop"
         >暂停</a-button
@@ -193,7 +193,7 @@ const onRefresh = async () => {
       console.log(res)
       if (res.code === 0) {
         if (res.data === null) {
-          console.warn('warning: get live capacity is null!!!')
+          console.warn('警告:获取直播失败!')
           return
         }
         const resData: Array<[]> = res.data
@@ -234,7 +234,7 @@ const onStart = async () => {
     cameraSelected.value == null ||
     claritySelected.value == null
   ) {
-    message.warn('waring: not select live para!!!')
+    message.warn('警告:未选择直播')
     return
   }
   videoId.value =
@@ -333,7 +333,7 @@ const onStop = () => {
 
 const onUpdateQuality = () => {
   if (!liveState.value) {
-    message.info('Please turn on the livestream first.')
+    message.info('请先打开直播.')
     return
   }
   setLivestreamQuality({
@@ -341,7 +341,7 @@ const onUpdateQuality = () => {
     video_quality: claritySelected.value
   }).then(res => {
     if (res.code === 0) {
-      message.success('Set the clarity to ' + clarityList[claritySelected.value].label)
+      message.success('清晰度切换至' + clarityList[claritySelected.value].label)
     }
   })
 }
@@ -406,7 +406,7 @@ const onSwitch = () => {
     video_type: lensSelected.value
   }).then(res => {
     if (res.code === 0) {
-      message.success('Switching live camera successfully.')
+      message.success('切换镜头成功')
     }
   })
 }
