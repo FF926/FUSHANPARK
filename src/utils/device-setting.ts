@@ -1,5 +1,11 @@
-import { DeviceInfoType } from '/@/types/device'
-import { DeviceSettingType, DeviceSettingKeyEnum, DistanceLimitStatusEnum, ObstacleAvoidanceStatusEnum, DeviceSettingFormModel, NightLightsStateEnum } from '/@/types/device-setting'
+import type { DeviceInfoType } from '@/types/device'
+import {
+  DeviceSettingKeyEnum,
+  DistanceLimitStatusEnum,
+  ObstacleAvoidanceStatusEnum,
+  NightLightsStateEnum
+} from '@/types/device-setting'
+import type { DeviceSettingType, DeviceSettingFormModel } from '@/types/device-setting'
 import { DEFAULT_PLACEHOLDER } from './constants'
 import { isNil } from 'lodash'
 
@@ -11,7 +17,10 @@ const Unit_M = ' m'
  * @param deviceInfo
  * @returns
  */
-export function updateDeviceSettingInfoByOsd (deviceSetting: DeviceSettingType, deviceInfo: DeviceInfoType) {
+export function updateDeviceSettingInfoByOsd(
+  deviceSetting: DeviceSettingType,
+  deviceInfo: DeviceInfoType
+) {
   const { device, dock, gateway } = deviceInfo || {}
   if (!deviceSetting) {
     return
@@ -118,7 +127,8 @@ export function updateDeviceSettingInfoByOsd (deviceSetting: DeviceSettingType, 
     if (isNil(downside)) {
       deviceSetting[DeviceSettingKeyEnum.OBSTACLE_AVOIDANCE_DOWNSIDE].editable = false
       deviceSetting[DeviceSettingKeyEnum.OBSTACLE_AVOIDANCE_DOWNSIDE].value = DEFAULT_PLACEHOLDER
-      deviceSetting[DeviceSettingKeyEnum.OBSTACLE_AVOIDANCE_DOWNSIDE].trueValue = DEFAULT_PLACEHOLDER
+      deviceSetting[DeviceSettingKeyEnum.OBSTACLE_AVOIDANCE_DOWNSIDE].trueValue =
+        DEFAULT_PLACEHOLDER
     } else {
       deviceSetting[DeviceSettingKeyEnum.OBSTACLE_AVOIDANCE_DOWNSIDE].editable = false
       if (downside === ObstacleAvoidanceStatusEnum.CLOSE) {
@@ -135,7 +145,10 @@ export function updateDeviceSettingInfoByOsd (deviceSetting: DeviceSettingType, 
 }
 
 // 更新formModel
-export function updateDeviceSettingFormModelByOsd (deviceSettingFormModelFromOsd: DeviceSettingFormModel, deviceInfo: DeviceInfoType) {
+export function updateDeviceSettingFormModelByOsd(
+  deviceSettingFormModelFromOsd: DeviceSettingFormModel,
+  deviceInfo: DeviceInfoType
+) {
   const { device, dock, gateway } = deviceInfo || {}
   if (!deviceSettingFormModelFromOsd) {
     return
@@ -160,7 +173,8 @@ export function updateDeviceSettingFormModelByOsd (deviceSettingFormModelFromOsd
   const distanceLimitStatus = device?.distance_limit_status?.state as any
   if (!isNil(distanceLimitStatus) && distanceLimitStatus === DistanceLimitStatusEnum.SET) {
     deviceSettingFormModelFromOsd.distanceLimitStatus.state = true
-    deviceSettingFormModelFromOsd.distanceLimitStatus.distanceLimit = device?.distance_limit_status?.distance_limit || 15
+    deviceSettingFormModelFromOsd.distanceLimitStatus.distanceLimit =
+      device?.distance_limit_status?.distance_limit || 15
   } else {
     deviceSettingFormModelFromOsd.distanceLimitStatus.state = false
     deviceSettingFormModelFromOsd.distanceLimitStatus.distanceLimit = 15

@@ -1,6 +1,11 @@
-import request, { IWorkspaceResponse } from '/@/api/http/request'
-import { ELocalStorageKey } from '/@/types'
-import { NightLightsStateEnum, DistanceLimitStatus, ObstacleAvoidance } from '/@/types/device-setting'
+import request from '@/api/http/request'
+import type { IWorkspaceResponse }  from '@/api/http/request'
+import { ELocalStorageKey } from '@/types'
+import type {
+  NightLightsStateEnum,
+  DistanceLimitStatus,
+  ObstacleAvoidance
+} from '@/types/device-setting'
 
 const MNG_API_PREFIX = '/manage/api/v1'
 const workspaceId: string = localStorage.getItem(ELocalStorageKey.WorkspaceId) || ''

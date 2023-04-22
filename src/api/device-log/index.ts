@@ -1,8 +1,9 @@
-import request, { IWorkspaceResponse, IListWorkspaceResponse } from '/@/api/http/request'
-import { DeviceValue, DOMAIN } from '/@/types/device'
-import { DeviceLogUploadStatusEnum } from '/@/types/device-log'
-import { ELocalStorageKey } from '/@/types'
-import { CURRENT_CONFIG } from '/@/api/http/config'
+import request from '@/api/http/request'
+import type { IWorkspaceResponse, IListWorkspaceResponse }  from '@/api/http/request'
+import type { DeviceValue, DOMAIN } from '@/types/device'
+import type { DeviceLogUploadStatusEnum } from '@/types/device-log'
+import { ELocalStorageKey } from '@/types'
+import { CURRENT_CONFIG } from '@/api/http/config'
 
 const MNG_API_PREFIX = '/manage/api/v1'
 

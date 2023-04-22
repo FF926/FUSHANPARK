@@ -1,4 +1,14 @@
-import { EStorageKey } from '/@/types/enums'
+/*
+ * @Author: QingHe meet_fqh@163.com
+ * @Date: 2023-04-14 14:33:43
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-04-20 17:20:07
+ * @FilePath: \ace-firefly\src\utils\storage.ts
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+ */
+import type { EStorageKey } from '@/types/enums'
 import { consoleWarn } from './logger'
 
 function getStorageData (key: EStorageKey, parse?: boolean): string | null

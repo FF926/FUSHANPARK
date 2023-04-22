@@ -1,8 +1,8 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-14 14:01:53
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-04-21 13:49:01
  * @FilePath: \ace-firefly\src\components\PanelLive.vue
  * @Description: 
  * 
@@ -11,16 +11,19 @@
 <!--  -->
 <template>
   <div class="live-main">
-    <div class="video-box"></div>
-    <div class="wait">
-      <div class="drone-icon"></div>
-      正在加载，请稍后
+    <div class="video-box">
+      <LiveStream />
     </div>
+    <!-- <div class="wait">
+      <div class="drone-icon"></div>
+      <div class="loding">正在加载,请稍后</div>
+    </div> -->
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted } from 'vue'
+import LiveStream from './livestream-others.vue'
 </script>
 <style scoped lang="scss">
 .live-main {
@@ -31,8 +34,8 @@ import { onMounted } from 'vue'
 }
 .wait {
   position: absolute;
-  width: 70%;
-  height: 70%;
+  width: 50%;
+  height: 50%;
   text-align: center;
   font-size: 20px;
   line-height: 0px;
@@ -57,10 +60,15 @@ import { onMounted } from 'vue'
       }
     }
   }
+  .loding {
+    color: white;
+    position: relative;
+    top: -50px;
+  }
 }
 .video-box {
   width: 90%;
   height: 75%;
-  background-color: #b9b9b9;
+  // background-color: #b9b9b9;
 }
 </style>

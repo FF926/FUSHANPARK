@@ -1,8 +1,23 @@
 import type { InjectionKey } from 'vue'
-import type { ActionTree,  GetterTree, MutationTree, Store, StoreOptions } from 'vuex'
-import {createStore,useStore} from 'vuex'
-import { EDeviceTypeName } from '@/types'
-import type { Device, DeviceHms, DeviceOsd, DeviceStatus, DockOsd, GatewayOsd, OSDVisible } from '@/types/device'
+import {
+  type ActionTree,
+  createStore,
+  type GetterTree,
+  type MutationTree,
+  Store,
+  type StoreOptions,
+  useStore
+} from 'vuex'
+import { EDeviceTypeName } from '../types'
+import type {
+  Device,
+  DeviceHms,
+  DeviceOsd,
+  DeviceStatus,
+  DockOsd,
+  GatewayOsd,
+  OSDVisible
+} from '../types/device'
 import { getLayers } from '@/api/layer'
 import { LayerType } from '@/types/mapLayer'
 import type { WaylineFile } from '@/types/wayline'
@@ -30,12 +45,10 @@ const initStateFunc = () => ({
     }
   ],
   layerBaseInfo: {} as {
-    [key:string]:string
+    [key: string]: string
   },
   drawVisible: false,
-  coverList: [
-
-  ] as any,
+  coverList: [] as any,
   wsEvent: {
     mapElementCreat: {},
     mapElementUpdate: {},
@@ -74,46 +87,40 @@ const initStateFunc = () => ({
     model: '',
     visible: false,
     gateway_sn: '',
-    is_dock: false,
+    is_dock: false
   } as OSDVisible,
-  waylineInfo: {
-
-  } as WaylineFile,
-  dockInfo: {
-
-  } as Device,
+  waylineInfo: {} as WaylineFile,
+  dockInfo: {} as Device,
   hmsInfo: {} as {
     [sn: string]: DeviceHms[]
   },
   // 机场指令执行状态信息
-  devicesCmdExecuteInfo: {
-  } as DevicesCmdExecuteInfo
+  devicesCmdExecuteInfo: {} as DevicesCmdExecuteInfo
 })
 
 export type RootStateType = ReturnType<typeof initStateFunc>
 
-const getters: GetterTree<RootStateType, RootStateType> = {
-}
+const getters: GetterTree<RootStateType, RootStateType> = {}
 const mutations: MutationTree<RootStateType> = {
-  SET_LAYER_INFO (state, info) {
+  SET_LAYER_INFO(state, info) {
     state.Layers = info
   },
-  SET_DEVICE_INFO (state, info) {
+  SET_DEVICE_INFO(state, info) {
     state.deviceState.deviceInfo[info.sn] = info.host
     state.deviceState.currentSn = info.sn
     state.deviceState.currentType = EDeviceTypeName.Aircraft
   },
-  SET_GATEWAY_INFO (state, info) {
+  SET_GATEWAY_INFO(state, info) {
     state.deviceState.gatewayInfo[info.sn] = info.host
     state.deviceState.currentSn = info.sn
     state.deviceState.currentType = EDeviceTypeName.Gateway
   },
-  SET_DOCK_INFO (state, info) {
+  SET_DOCK_INFO(state, info) {
     if (Object.keys(info.host).length === 0) {
       return
     }
     if (!state.deviceState.dockInfo[info.sn]) {
-      state.deviceState.dockInfo[info.sn] = { } as DockOsd
+      state.deviceState.dockInfo[info.sn] = {} as DockOsd
     }
     state.deviceState.currentSn = info.sn
     state.deviceState.currentType = EDeviceTypeName.Dock
@@ -128,22 +135,22 @@ const mutations: MutationTree<RootStateType> = {
     }
     dock.basic_osd = info.host
   },
-  SET_DRAW_VISIBLE_INFO (state, bool) {
+  SET_DRAW_VISIBLE_INFO(state, bool) {
     state.drawVisible = bool
   },
-  SET_MAP_ELEMENT_CREATE (state, info) {
+  SET_MAP_ELEMENT_CREATE(state, info) {
     state.wsEvent.mapElementCreat = info
   },
-  SET_MAP_ELEMENT_UPDATE (state, info) {
+  SET_MAP_ELEMENT_UPDATE(state, info) {
     state.wsEvent.mapElementUpdate = info
   },
-  SET_MAP_ELEMENT_DELETE (state, info) {
+  SET_MAP_ELEMENT_DELETE(state, info) {
     state.wsEvent.mapElementDelete = info
   },
-  SET_DEVICE_ONLINE (state, info) {
+  SET_DEVICE_ONLINE(state, info) {
     state.deviceStatusEvent.deviceOnline = info
   },
-  SET_DEVICE_OFFLINE (state, info) {
+  SET_DEVICE_OFFLINE(state, info) {
     state.deviceStatusEvent.deviceOffline = info
     delete state.deviceState.gatewayInfo[info.sn]
     delete state.deviceState.deviceInfo[info.sn]
@@ -152,25 +159,28 @@ const mutations: MutationTree<RootStateType> = {
     // delete state.markerInfo.coverMap[info.sn]
     // delete state.markerInfo.pathMap[info.sn]
   },
-  SET_OSD_VISIBLE_INFO (state, info) {
+  SET_OSD_VISIBLE_INFO(state, info) {
     state.osdVisible = info
   },
-  SET_SELECT_WAYLINE_INFO (state, info) {
+  SET_SELECT_WAYLINE_INFO(state, info) {
     state.waylineInfo = info
   },
-  SET_SELECT_DOCK_INFO (state, info) {
+  SET_SELECT_DOCK_INFO(state, info) {
     state.dockInfo = info
   },
-  SET_DEVICE_HMS_INFO (state, info) {
+  SET_DEVICE_HMS_INFO(state, info) {
     const hmsList: Array<DeviceHms> = state.hmsInfo[info.sn]
     state.hmsInfo[info.sn] = info.host.concat(hmsList ?? [])
   },
-  SET_DEVICES_CMD_EXECUTE_INFO (state, info) { // 保存设备指令ws消息推送
+  SET_DEVICES_CMD_EXECUTE_INFO(state, info) {
+    // 保存设备指令ws消息推送
     if (!info.sn) {
       return
     }
     if (state.devicesCmdExecuteInfo[info.sn]) {
-      const index = state.devicesCmdExecuteInfo[info.sn].findIndex(cmdExecuteInfo => cmdExecuteInfo.biz_code === info.biz_code)
+      const index = state.devicesCmdExecuteInfo[info.sn].findIndex(
+        (cmdExecuteInfo) => cmdExecuteInfo.biz_code === info.biz_code
+      )
       if (index >= 0) {
         // 丢弃前面的消息
         if (state.devicesCmdExecuteInfo[info.sn][index].timestamp > info.timestamp) {
@@ -187,7 +197,7 @@ const mutations: MutationTree<RootStateType> = {
 }
 
 const actions: ActionTree<RootStateType, RootStateType> = {
-  async getAllElement ({ commit }) {
+  async getAllElement({ commit }) {
     const result = await getLayers({
       groupId: '',
       isDistributed: true
@@ -195,21 +205,21 @@ const actions: ActionTree<RootStateType, RootStateType> = {
     commit('SET_LAYER_INFO', result.data?.list)
     console.log(result)
   },
-  updateElement ({ state }, content: {type: 'is_check' | 'is_select', id: string, bool:boolean}) {
+  updateElement({ state }, content: { type: 'is_check' | 'is_select'; id: string; bool: boolean }) {
     const key = content.id.replaceAll('resource__', '')
     const type = content.type
     const layers = state.Layers
-    const layer = layers.find(item => item.id === key)
+    const layer = layers.find((item) => item.id === key)
     if (layer) {
       layer[type] = content.bool
     }
   },
-  setLayerInfo ({ state }, layers) {
+  setLayerInfo({ state }, layers) {
     // const layers = state.Layers
-    const obj:{
-      [key:string]:string
+    const obj: {
+      [key: string]: string
     } = {}
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       if (layer.type === LayerType.Default) {
         obj.default = layer.id
       } else {
@@ -221,7 +231,7 @@ const actions: ActionTree<RootStateType, RootStateType> = {
     state.layerBaseInfo = obj
     console.log('state.layerBaseInfo', state.layerBaseInfo)
   },
-  getLayerInfo ({ state }, id:string) {
+  getLayerInfo({ state }, id: string) {
     return state.layerBaseInfo[id]
   }
 }
@@ -243,6 +253,6 @@ type AllStateStoreTypes = RootStateType & {
   // moduleName: moduleType
 }
 
-export function useMyStore<T = AllStateStoreTypes> () {
+export function useMyStore<T = AllStateStoreTypes>() {
   return useStore<T>(storeKey)
 }

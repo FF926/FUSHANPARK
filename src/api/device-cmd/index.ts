@@ -1,5 +1,6 @@
-import request, { IWorkspaceResponse } from '/@/api/http/request'
-import { DeviceCmd, DeviceCmdItemAction } from '/@/types/device-cmd'
+import request from '@/api/http/request'
+import type { IWorkspaceResponse } from '@/api/http/request'
+import type { DeviceCmd, DeviceCmdItemAction } from '@/types/device-cmd'
 
 const CMD_API_PREFIX = '/control/api/v1'
 

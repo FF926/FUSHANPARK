@@ -130,8 +130,8 @@ $hideWidth: -26%;
 .my-dialog {
   display: none;
   position: absolute;
-  width: 25%;
-  height: 60%;
+  width: 700px;
+  height: 700px;
   left: 8%;
   top: 2rem;
   background-color: #023d5ecc;
@@ -143,6 +143,7 @@ $hideWidth: -26%;
   }
 }
 .dialog-title {
+  color: white;
   font-size: 22px;
   font-weight: lighter;
   padding: 3px;

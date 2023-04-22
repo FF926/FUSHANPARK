@@ -1,8 +1,9 @@
 import { message } from 'ant-design-vue'
 import { EComponentName, EPhotoType, ERouterName } from '../types'
 import { CURRENT_CONFIG } from './http/config'
-import { EVideoPublishType, LiveStreamStatus } from '../types/live-stream'
-import { getRoot } from '/@/root'
+import { EVideoPublishType } from '../types/live-stream'
+import type { LiveStreamStatus } from '../types/live-stream'
+import { getRoot } from '@/root'
 
 const root = getRoot()
 export const components = new Map()
@@ -181,7 +182,10 @@ export default {
 
   // api
   getToken () : string {
-    return returnString(window.djiBridge.apiGetToken())
+    return returnString(
+      'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3b3Jrc3BhY2VfaWQiOiJlM2RlYTBmNS0zN2YyLTRkNzktYWU1OC00OTBhZjMyMjgwNjkiLCJzdWIiOiJDbG91ZEFwaVNhbXBsZSIsInVzZXJfdHlwZSI6IjEiLCJuYmYiOjE2ODE5Njc2MzEsImxvZyI6IkxvZ2dlcltjb20uZGppLnNhbXBsZS5jb21tb24ubW9kZWwuQ3VzdG9tQ2xhaW1dIiwiaXNzIjoiREpJIiwiaWQiOiJhMTU1OWU3Yy04ZGQ4LTQ3ODAtYjk1Mi0xMDBjYzQ3OTdkYTIiLCJleHAiOjE3NjgzNjc2MzEsImlhdCI6MTY4MTk2NzYzMSwidXNlcm5hbWUiOiJhZG1pblBDIn0.RZKh-87n_Htg4y15qt8b5Ewqe6moES1HPLz1sZx6waU'
+    )
+    // return returnString(window.djiBridge.apiGetToken())
   },
   setToken (token:string):string {
     return returnString(window.djiBridge.apiSetToken(token))

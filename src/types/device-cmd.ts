@@ -1,4 +1,4 @@
-import { AlarmModeEnum, BatteryStoreModeEnum, DroneBatteryModeEnum, LinkWorkModeEnum } from '/@/types/airport-tsa'
+import { AlarmModeEnum, BatteryStoreModeEnum, DroneBatteryModeEnum, LinkWorkModeEnum } from '@/types/airport-tsa'
 // 机场指令集
 export enum DeviceCmd {
   // 简单指令

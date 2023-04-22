@@ -1,8 +1,8 @@
 /*
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-10 16:52:33
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-15 14:31:09
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-04-21 11:58:47
  * @FilePath: \ace-firefly\src\main.ts
  * @Description:
  *
@@ -18,12 +18,15 @@ import 'element-plus/theme-chalk/src/dark/css-vars.scss'
 
 import './assets/styles/main.css'
 import './assets/styles/olStyle.scss'
-
+import store, { storeKey } from './store'
 import { antComponents } from './antd'
 import { CommonComponents } from './use-common-components'
-const app = createApp(App)
+import { createInstance } from '@/root'
+
+const app = createInstance(App)
 app.use(CommonComponents)
 app.use(antComponents)
+app.use(store, storeKey)
 
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component)

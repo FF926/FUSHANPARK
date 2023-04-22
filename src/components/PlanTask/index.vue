@@ -2,7 +2,7 @@
  * @Author: QingHe meet_fqh@163.com
  * @Date: 2023-04-13 10:37:34
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-04-14 14:52:42
+ * @LastEditTime: 2023-04-22 13:50:36
  * @FilePath: \ace-firefly\src\components\PlanTask\index.vue
  * @Description: 
  * 
@@ -11,7 +11,7 @@
 <template>
   <div>
     <a-modal title="航线计划" :width="1500" v-model:visible="visible" :footer="null">
-      <a-button style="margin-right:10px;" type="primary" @click="handlePlan">新建航线</a-button>
+      <a-button style="margin-right: 10px" type="primary" @click="handlePlan">新建航线</a-button>
       <a-button type="primary" @click="handleTsa">在线设备</a-button>
       <CreatePlan ref="plan" />
       <TsaDevice ref="tsa" />

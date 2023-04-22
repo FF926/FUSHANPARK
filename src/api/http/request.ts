@@ -2,44 +2,50 @@ import axios from 'axios'
 import { uuidv4 } from '@/utils/uuid'
 import { CURRENT_CONFIG } from './config'
 import { message } from 'ant-design-vue'
-// import router from '@/router'
+import router from '@/router'
 import { ELocalStorageKey, ERouterName, EUserType } from '@/types/enums'
 export * from './type'
 
 const REQUEST_ID = 'X-Request-Id'
-function getAuthToken () {
+function getAuthToken() {
   return localStorage.getItem(ELocalStorageKey.Token)
 }
 
 const instance = axios.create({
   // withCredentials: true,
   headers: {
-    'Content-Type': 'application/json',
-  },
+    'Content-Type': 'application/json'
+  }
   // timeout: 12000,
 })
 
 instance.interceptors.request.use(
-  config => {
-    config.headers[ELocalStorageKey.Token] = getAuthToken()
+  (config) => {
+    config.headers[ELocalStorageKey.Token] = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ3b3Jrc3BhY2VfaWQiOiJlM2RlYTBmNS0zN2YyLTRkNzktYWU1OC00OTBhZjMyMjgwNjkiLCJzdWIiOiJDbG91ZEFwaVNhbXBsZSIsInVzZXJfdHlwZSI6IjEiLCJuYmYiOjE2ODE5Njc2MzEsImxvZyI6IkxvZ2dlcltjb20uZGppLnNhbXBsZS5jb21tb24ubW9kZWwuQ3VzdG9tQ2xhaW1dIiwiaXNzIjoiREpJIiwiaWQiOiJhMTU1OWU3Yy04ZGQ4LTQ3ODAtYjk1Mi0xMDBjYzQ3OTdkYTIiLCJleHAiOjE3NjgzNjc2MzEsImlhdCI6MTY4MTk2NzYzMSwidXNlcm5hbWUiOiJhZG1pblBDIn0.RZKh-87n_Htg4y15qt8b5Ewqe6moES1HPLz1sZx6waU'
     // config.headers[REQUEST_ID] = uuidv4()
     config.baseURL = CURRENT_CONFIG.baseURL
     return config
   },
-  error => {
+  (error) => {
     return Promise.reject(error)
-  },
+  }
 )
 
 instance.interceptors.response.use(
-  response => {
-    console.info('URL: ' + response.config.baseURL + response.config.url, '\nData: ', response.data, '\nResponse:', response)
+  (response) => {
+    console.info(
+      'URL: ' + response.config.baseURL + response.config.url,
+      '\nData: ',
+      response.data,
+      '\nResponse:',
+      response
+    )
     if (response.data.code && response.data.code !== 0) {
       message.error(response.data.message)
     }
     return response
   },
-  err => {
+  (err) => {
     const requestId = err?.config?.headers && err?.config?.headers[REQUEST_ID]
     if (requestId) {
       console.info(REQUEST_ID, '：', requestId)
@@ -69,16 +75,16 @@ instance.interceptors.response.use(
       const flag: number = Number(localStorage.getItem(ELocalStorageKey.Flag))
       switch (flag) {
         case EUserType.Web:
-          // router.push(ERouterName.PROJECT)
+          router.push(ERouterName.PROJECT)
           break
         case EUserType.Pilot:
-          // router.push(ERouterName.PILOT)
+          router.push(ERouterName.PILOT)
           break
       }
     }
 
     return Promise.reject(err)
-  },
+  }
 )
 
 export default instance

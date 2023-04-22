@@ -1,6 +1,6 @@
-import {
+import type {
   MapGeographicPosition,
-} from '/@/types/map'
+} from '@/types/map'
 
 export type GeojsonCoordinate = [number, number, number?]
 

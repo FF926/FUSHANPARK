@@ -1,15 +1,22 @@
 import { message } from 'ant-design-vue'
-import request, { IPage, IWorkspaceResponse } from '/@/api/http/request'
+import request from '@/api/http/request'
+import type { IPage, IWorkspaceResponse } from '@/api/http/request'
 const HTTP_PREFIX = '/media/api/v1'
 
 // Get Media Files
-export const getMediaFiles = async function (wid: string, pagination: IPage): Promise<IWorkspaceResponse<any>> {
+export const getMediaFiles = async function (
+  wid: string,
+  pagination: IPage
+): Promise<IWorkspaceResponse<any>> {
   const url = `${HTTP_PREFIX}/files/${wid}/files?page=${pagination.page}&page_size=${pagination.page_size}`
   const result = await request.get(url)
   return result.data
 }
 // Download Media File
-export const downloadMediaFile = async function (workspaceId: string, fileId: string): Promise<any> {
+export const downloadMediaFile = async function (
+  workspaceId: string,
+  fileId: string
+): Promise<any> {
   const url = `${HTTP_PREFIX}/files/${workspaceId}/file/${fileId}/url`
   const result = await request.get(url, { responseType: 'blob' })
   if (result.data.type === 'application/json') {

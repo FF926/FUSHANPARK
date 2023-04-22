@@ -9,25 +9,32 @@
  * 3.对外暴露统一拦截器绑定方案，允许外界进行定制: bindCommonRequestInterceptors、bindCommonResponseInterceptors
  */
 
-import Axios, { AxiosInstance, AxiosRequestConfig } from 'axios'
+import Axios from 'axios'
+import type { AxiosInstance, AxiosRequestConfig } from 'axios'
 
 // 统一的 request 拦截器
-export function bindCommonRequestInterceptors (instance: AxiosInstance): void {
-  instance.interceptors.request.use(config => {
+export function bindCommonRequestInterceptors(instance: AxiosInstance): void {
+  instance.interceptors.request.use((config) => {
     return config
   })
 }
 
 // Unified response interceptor
-export function bindCommonResponseInterceptors (instance: AxiosInstance): void {
-  instance.interceptors.response.use(config => {
-    return config
-  }, err => {
-    return Promise.reject(err)
-  })
+export function bindCommonResponseInterceptors(instance: AxiosInstance): void {
+  instance.interceptors.response.use(
+    (config) => {
+      return config
+    },
+    (err) => {
+      return Promise.reject(err)
+    }
+  )
 }
 
-export function createAxiosInstance (config?: AxiosRequestConfig, commonInterceptorConf: { request?: boolean, response?: boolean } = {}): AxiosInstance {
+export function createAxiosInstance(
+  config?: AxiosRequestConfig,
+  commonInterceptorConf: { request?: boolean; response?: boolean } = {}
+): AxiosInstance {
   const instance = Axios.create(config)
 
   // Binding a unified interceptor, binding by default

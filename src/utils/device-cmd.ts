@@ -1,7 +1,9 @@
 import { DroneBatteryModeEnum, DroneBatteryStateEnum, LinkWorkModeEnum } from './../types/airport-tsa'
-import { DeviceInfoType } from '/@/types/device'
-import { DeviceCmd, DeviceCmdItem, DeviceCmdExecuteInfo, DeviceCmdStatusText, DeviceCmdExecuteStatus } from '/@/types/device-cmd'
-import { AirportStorage, CoverStateEnum, PutterStateEnum, ChargeStateEnum, SupplementLightStateEnum, AlarmModeEnum, BatteryStoreModeEnum } from '/@/types/airport-tsa'
+import type { DeviceInfoType } from '@/types/device'
+import { DeviceCmd, DeviceCmdStatusText, DeviceCmdExecuteStatus } from '@/types/device-cmd'
+import type { DeviceCmdItem, DeviceCmdExecuteInfo } from '@/types/device-cmd'
+import {  CoverStateEnum, PutterStateEnum, ChargeStateEnum, SupplementLightStateEnum, AlarmModeEnum, BatteryStoreModeEnum } from '@/types/airport-tsa'
+import type { AirportStorage } from '@/types/airport-tsa'
 import { getBytesObject } from './bytes'
 import { DEFAULT_PLACEHOLDER } from './constants'
 
