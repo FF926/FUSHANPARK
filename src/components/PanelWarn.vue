@@ -1,8 +1,8 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-22 15:19:16
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-04-22 17:15:45
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -18,22 +18,24 @@
       <el-form-item>
         <el-button type="primary" @click="selectAll">全选</el-button>
         <el-button type="danger" @click="doDelete">删除</el-button>
+        <el-button type="danger" @click="getWarnings">删除</el-button>
       </el-form-item>
     </el-form>
-    <el-table ref="multipleTableRef" :data="tableData" style="width: 100%">
+    <el-table ref="multipleTableRef" :data="warninginfo" style="width: 100%">
       <el-table-column type="selection" width="26" />
       <el-table-column align="center" type="index" width="55" label="序号" />
-      <el-table-column align="center" prop="time" label="预警时间" />
-      <el-table-column align="center" prop="coordinate" width="98" label="坐标" />
-      <el-table-column prop="processingStatus" label="处理状态">
+      <el-table-column align="center" prop="create_time" width="150" label="预警时间" />
+      <el-table-column align="center" prop="longitude" width="98" label="经度" />
+      <el-table-column align="center" prop="latitude" width="98" label="纬度" />
+      <el-table-column prop="status" width="105" label="处理状态">
         <template #default="{ row }">
-          <el-select v-model="row.processingStatus" :disabled="row.processingStatus ? true : false">
-            <el-option label="已处理" :value="1" @click="isProcess"></el-option>
+          <el-select v-model="row.status" :disabled="row.status ? true : false">
+            <el-option label="已处理" :value="3"></el-option>
+            <el-option label="误报" :value="2" ></el-option>
             <el-option label="未处理" :value="0"></el-option>
           </el-select>
         </template>
       </el-table-column>
-      <el-table-column align="center" prop="isFalse" width="80" label="是否误报" />
     </el-table>
     <!-- <el-dialog v-model="centerDialogVisible" title="Warning" width="30%" align-center>
       <span>请确认本条预警信息是否误报</span>
@@ -44,38 +46,58 @@
         </span>
       </template>
     </el-dialog> -->
+    <div class="pager">
+      <el-pagination
+        v-model:current-page="paginationProp.current"
+        v-model:page-size="paginationProp.pageSize"
+        :page-sizes="paginationProp.pageSizeOptions"
+        :small="true"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="paginationProp.total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { getWarnList } from '@/api/project'
 import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
 
 // const centerDialogVisible = ref(true)
-function isProcess() {
-  console.log(111)
-  open()
-}
-const open = () => {
-  ElMessageBox.confirm('请确认本条预警信息是否误报', '提示', {
-    confirmButtonText: '是',
-    cancelButtonText: '否',
-    type: 'warning'
-  })
-    .then(() => {
-      ElMessage({
-        type: 'success',
-        message: '是误报'
-      })
-    })
-    .catch(() => {
-      ElMessage({
-        type: 'info',
-        message: '不是误报'
-      })
-    })
-}
+// function isProcess() {
+//   console.log(111)
+//   open()
+// }
+const paginationProp = reactive({
+  pageSizeOptions: [10, 20, 50, 100],
+  showQuickJumper: true,
+  showSizeChanger: true,
+  pageSize: 10,
+  current: 1,
+  total: 0
+})
+// const open = () => {
+//   ElMessageBox.confirm('请确认本条预警信息是否误报', '提示', {
+//     confirmButtonText: '是',
+//     cancelButtonText: '否',
+//     type: 'warning'
+//   })
+//     .then(() => {
+//       ElMessage({
+//         type: 'success',
+//         message: '是误报'
+//       })
+//     })
+//     .catch(() => {
+//       ElMessage({
+//         type: 'info',
+//         message: '不是误报'
+//       })
+//     })
+// }
 const options = [
   {
     value: 'Option1',
@@ -98,6 +120,17 @@ const options = [
     label: 'Option5'
   }
 ]
+interface WarningInfo {
+  id: number
+  picture_file: string
+  create_time: string
+  longitude: string
+  update_time: string
+  status: number
+  latitude: string
+  height: string
+}
+const warninginfo = ref([] as WarningInfo[])
 const tableData = [
   {
     time: '2016-05-03 18:35:00',
@@ -147,23 +180,16 @@ const tableData = [
 const form1 = reactive({
   date: ''
 })
-// do not use same name with ref
-const form = reactive({
-  name: '',
-  region: '',
-  date1: '',
-  date2: '',
-  delivery: false,
-  type: [],
-  resource: '',
-  desc: ''
-})
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 
 function selectAll() {
   multipleTableRef.value!.toggleAllSelection()
 }
-
+function Search() {
+  console.log('查询')
+  const data = getWarnList({ page: 1, page_size: 10 })
+  console.log(data)
+}
 function doDelete() {
   ElMessageBox.confirm('确认删除选中的信息？')
     .then(() => {
@@ -174,16 +200,36 @@ function doDelete() {
       ElMessage('取消')
     })
 }
-const onSubmit = () => {
-  console.log('submit!')
-}
+onMounted(() => {
+  getWarnings()
+  // domHeight.value = refPanelManage.value?.offsetHeight! - 200
+})
 
 async function doGetWarnList(params: any) {
   const data = await getWarnList({ page: 1, page_size: 20 })
   console.log(data)
 }
+function handleSizeChange() {
+  getWarnings()
+}
+function getWarnings() {
+  const body = {
+    page: paginationProp.current,
+    total: 0,
+    page_size: paginationProp.pageSize
+  }
+  console.log(body)
 
-doGetWarnList()
+  getWarnList(body).then((res) => {
+    warninginfo.value = res.data.records
+    console.log(warninginfo.value)
+    paginationProp.total = res.data.total
+    paginationProp.current = res.data.current
+  })
+}
+function handleCurrentChange() {
+  getWarnings()
+}
 </script>
 <style scoped lang="scss">
 .main-box {
