@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-15 15:00:24
+ * @LastEditTime: 2023-04-17 08:09:21
  * @FilePath: \ace-firefly\src\components\PanelManage.vue
  * @Description: 
  * 
@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
-import { ElMessageBox } from 'element-plus'
+import { ElMessageBox, ElMessage } from 'element-plus'
 import { ElTable } from 'element-plus'
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
@@ -86,14 +86,28 @@ function selectAll() {
 }
 
 function doDelete() {
+  const selected = multipleTableRef.value!.getSelectionRows()
+  if (!selected || selected.length < 1) {
+    ElMessage({
+      type: 'info',
+      message: '请选择需要删除的图片'
+    })
+    return
+  }
   ElMessageBox.confirm('确认删除选中的图片？')
     .then(() => {
-      console.log(multipleTableRef.value!.getSelectionRows())
-
-      alert('删除成功')
+      console.log(selected)
+      ElMessage({
+        type: 'success',
+        message: '删除成功'
+      })
+      multipleTableRef.value!.clearSelection()
     })
     .catch(() => {
-      alert('已取消')
+      ElMessage({
+        type: 'info',
+        message: '已取消'
+      })
     })
 }
 </script>
