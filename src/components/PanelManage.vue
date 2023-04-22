@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-17 08:09:21
+ * @LastEditTime: 2023-04-22 15:46:06
  * @FilePath: \ace-firefly\src\components\PanelManage.vue
  * @Description: 
  * 
@@ -10,11 +10,11 @@
 -->
 <!--  -->
 <template>
-  <div class="main-box">
+  <div class="main-box" ref="refPanelManage">
     <el-form class="my-form" :model="form" label-width="120px">
-      <el-form-item label="时间范围">
+      <!-- <el-form-item label="时间范围">
         <el-date-picker v-model="form.date" type="datetimerange" placeholder="请选择" />
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item>
         <el-button type="primary" @click="selectAll">全选</el-button>
         <el-button type="danger" @click="doDelete">删除</el-button>
@@ -22,63 +22,135 @@
     </el-form>
     <el-table
       ref="multipleTableRef"
-      :data="tableData"
+      :data="mediaData.data"
       :show-overflow-tooltip="true"
       style="width: 100%"
+      :height="domHeight"
     >
       <el-table-column type="selection" width="55" />
-      <el-table-column prop="date" label="Date" />
-      <el-table-column prop="name" label="Name" />
-      <el-table-column prop="address" label="Address" />
+      <el-table-column
+        v-for="item in dataTableCols"
+        :key="item.prop"
+        :prop="item.prop"
+        :label="item.label"
+      />
       <el-table-column align="right">
         <template #default="scope">
           <el-button size="small" :text="true" @click="showDetail(scope.$index, scope.row)"
-            >查看</el-button
+            >下载</el-button
           >
         </template>
       </el-table-column>
     </el-table>
+    <div class="pager">
+      <el-pagination
+        v-model:current-page="paginationProp.current"
+        v-model:page-size="paginationProp.pageSize"
+        :page-sizes="paginationProp.pageSizeOptions"
+        :small="true"
+        layout="total, sizes, prev, pager, next, jumper"
+        :total="paginationProp.total"
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+      />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref, onMounted } from 'vue'
 import { ElMessageBox, ElMessage } from 'element-plus'
 import { ElTable } from 'element-plus'
+import { downloadMediaFile, getMediaFiles } from '@/api/media'
+import { downloadFile } from '@/utils/common'
+
+const workspaceId = localStorage.getItem('workspace_id')!
 
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 
-const tableData = [
+const refPanelManage = ref<HTMLDivElement>()
+
+const paginationProp = reactive({
+  pageSizeOptions: [10, 20, 50, 100],
+  showQuickJumper: true,
+  showSizeChanger: true,
+  pageSize: 50,
+  current: 1,
+  total: 0
+})
+
+const domHeight = ref(0)
+
+const dataTableCols = [
   {
-    date: '2016-05-03',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    prop: 'file_name',
+    label: '文件名'
   },
   {
-    date: '2016-05-02',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    prop: 'payload',
+    label: '载荷类型'
   },
   {
-    date: '2016-05-04',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
-  },
-  {
-    date: '2016-05-01',
-    name: 'Tom',
-    address: 'No. 189, Grove St, Los Angeles'
+    prop: 'create_time',
+    label: '创建时间'
   }
 ]
+
+interface MediaFile {
+  fingerprint: string
+  drone: string
+  payload: string
+  is_original: string
+  file_name: string
+  file_path: string
+  create_time: string
+  file_id: string
+}
+
+const mediaData = reactive({
+  data: [] as MediaFile[]
+})
+
+onMounted(() => {
+  getFiles()
+  domHeight.value = refPanelManage.value?.offsetHeight! - 200
+})
+
+function handleSizeChange() {
+  getFiles()
+}
+
+function handleCurrentChange() {
+  getFiles()
+}
+
+function getFiles() {
+  const body = {
+    page: paginationProp.current,
+    total: 0,
+    page_size: paginationProp.pageSize
+  }
+
+  getMediaFiles(workspaceId, body).then((res) => {
+    mediaData.data = res.data.list
+    paginationProp.total = res.data.pagination.total
+    paginationProp.current = res.data.pagination.page
+  })
+}
 
 // do not use same name with ref
 const form = reactive({
   date: ''
 })
 
-function showDetail(idx: number, row: any) {
-  console.log(idx)
-  console.log(row)
+function showDetail(idx: number, media: MediaFile) {
+  downloadMediaFile(workspaceId, media.file_id).then((res) => {
+    if (!res) {
+      return
+    }
+    const data = new Blob([res])
+    downloadFile(data, media.file_name)
+  })
 }
 
 function selectAll() {
@@ -115,6 +187,7 @@ function doDelete() {
 .main-box {
   width: 100%;
   padding: 10px;
+  height: 100%;
 }
 .my-form {
   width: 95%;

@@ -1,8 +1,8 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
- * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-04-20 09:14:24
+ * @LastEditors: chongyanlin chongyanlin@aceimage.com
+ * @LastEditTime: 2023-04-22 15:19:16
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -49,6 +49,7 @@
 
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
+import { getWarnList } from '@/api/project'
 import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
 
 // const centerDialogVisible = ref(true)
@@ -176,6 +177,13 @@ function doDelete() {
 const onSubmit = () => {
   console.log('submit!')
 }
+
+async function doGetWarnList(params: any) {
+  const data = await getWarnList({ page: 1, page_size: 20 })
+  console.log(data)
+}
+
+doGetWarnList()
 </script>
 <style scoped lang="scss">
 .main-box {
