@@ -2,15 +2,17 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2022-11-24 15:21:24
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-15 14:15:23
+ * @LastEditTime: 2023-04-22 18:06:59
  * @FilePath: \ace-firefly\src\components\module\MainMap.ts
  * @Description:
  *
  * Copyright (c) 2022 by chongyanlin chongyanlin@aceimage.com, All Rights Reserved.
  */
 import * as OL from '@/extensions/OLConfig'
+import Feature from 'ol/Feature.js'
 
 export default class MainMap {
+  ready: boolean = false
   map: OL.prototype.Map.default
   center = OL.prototype.Proj.fromLonLat([120.4347, 36.0881], 'EPSG:3857')
 
@@ -34,6 +36,7 @@ export default class MainMap {
       target: ele,
       view: new OL.prototype.View.default({
         center: this.center,
+        projection: 'EPSG:3857',
         zoom: 15,
         maxZoom: 18,
         minZoom: 6
@@ -49,6 +52,7 @@ export default class MainMap {
       .getControls()
       .extend([OL.initMousePosition(document.getElementById('mouse-position') as HTMLElement)])
     ;(window as any).olmap = this.map
+    this.ready = true
   }
 
   /**
@@ -169,13 +173,13 @@ export default class MainMap {
   }
 
   // 获取矢量图层
-  public getTempVecLayer(name: string) {
+  public getTempVecLayer(name: string): OL.prototype.Layer.Vector<OL.prototype.Source.Vector>[] {
     const tempLayer = this.map
       .getLayers()
       .getArray()
       .filter((layer: any) => layer.get('type') === 'temp' && layer.get('layerName') === name)
     if (tempLayer.length > 0) {
-      return tempLayer
+      return tempLayer as any
     } else {
       return []
     }
@@ -209,6 +213,43 @@ export default class MainMap {
       const num = this.map.getLayers().getLength()
       layer.setZIndex(num)
     }
+  }
+
+  /**
+   * addPhotoPin
+   */
+  public addPhotoPin(coord: any[]) {
+    const ly = this.getTempVecLayer('photoLayer')
+    ly[0].getSource()?.clear()
+
+    const style = new OL.prototype.Style.Style({
+      image: new OL.prototype.Style.Circle({
+        radius: 7,
+        fill: new OL.prototype.Style.Fill({
+          color: '#ffcc33'
+        }),
+        stroke: new OL.prototype.Style.Stroke({
+          color: '#ff0000',
+          width: 1
+        })
+      })
+    })
+
+    coord.forEach((item: any) => {
+      const geometry = new OL.prototype.Geom.Point(
+        OL.prototype.Proj.fromLonLat([item.longitude, item.latitude], 'EPSG:3857')
+      )
+
+      const f = new Feature({
+        geometry
+      })
+      f.setProperties({ ...item })
+      f.setStyle(style)
+
+      ly[0].getSource()?.addFeature(f)
+
+      return f
+    })
   }
 }
 

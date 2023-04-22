@@ -2,7 +2,7 @@
  * @Author: error: git config user.name && git config user.email & please set dead value or install git
  * @Date: 2022-11-21 16:19:30
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-15 14:28:08
+ * @LastEditTime: 2023-04-22 17:05:03
  * @FilePath: \ace-firefly\src\components\MainMap.vue
  * @Description: 
  * 
@@ -14,6 +14,7 @@ import { ref, onMounted } from 'vue'
 import { unByKey } from 'ol/Observable'
 import Overlay from 'ol/Overlay'
 import OLMeasure from '@/extensions/OLMeasure'
+import { project_global } from '@/root'
 
 let mainMap: MainMap
 let popupInfo = ref('')
@@ -46,8 +47,11 @@ onMounted(() => {
   })
   mainMap.map.addOverlay(overlay)
 
+  mainMap.addTempVecLayer('photoLayer')
   const measureLayer = mainMap.addTempVecLayer('measureLayer')
   OLMeasureImpl = new OLMeasure(mainMap.map, measureLayer)
+
+  project_global.$map = mainMap
 })
 
 /**
