@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-04-22 17:49:52
+ * @LastEditTime: 2023-04-22 18:14:54
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -69,6 +69,8 @@ import { reactive, ref, onMounted } from 'vue'
 import { getWarnList, deleteWarn, updateWarnStatus } from '@/api/project'
 import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { message } from 'ant-design-vue'
+import { project_global } from '@/root'
+import type MainMap from './module/MainMap'
 
 // const centerDialogVisible = ref(true)
 // function isProcess() {
@@ -150,12 +152,12 @@ const domHeight = ref(0)
 onMounted(() => {
   getWarnings()
   domHeight.value = refPanelManage.value?.offsetHeight! + 450
+  mapComp.value = project_global.$map
+  mapComp.value?.addClickListenerToLayer('photoLayer', (feature) => {
+    console.log(feature)
+  })
 })
 
-async function doGetWarnList(params: any) {
-  const data = await getWarnList({ page: 1, page_size: 20 })
-  console.log(data)
-}
 function handleSizeChange() {
   getWarnings()
 }
@@ -169,6 +171,7 @@ function getWarnings() {
 
   getWarnList(body).then((res) => {
     warninginfo.value = res.data.records
+    mapComp.value?.addPhotoPin(warninginfo.value)
     console.log(warninginfo.value)
     paginationProp.total = res.data.total
     paginationProp.current = res.data.current
@@ -213,6 +216,12 @@ function deleteWarnInfo() {
       ElMessage('取消')
     })
 }
+// async function doGetWarnList() {
+//   const data = await getWarnList({ page: 1, page_size: 20 })
+//   mapComp.value?.addPhotoPin(data.data.records)
+// }
+
+const mapComp = ref<MainMap | null>(null)
 </script>
 <style scoped lang="scss">
 .main-box {
