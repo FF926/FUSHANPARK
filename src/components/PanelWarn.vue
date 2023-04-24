@@ -1,14 +1,13 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
- * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-04-22 18:14:54
+ * @LastEditors: chongyanlin chongyanlin@aceimage.com
+ * @LastEditTime: 2023-04-24 13:53:15
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
  * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
 -->
-<!--  -->
 <template>
   <div class="main-box" ref="refPanelManage">
     <el-form class="my-form" :model="form1" label-width="120px">
@@ -20,7 +19,13 @@
         <el-button type="danger" @click="deleteWarnInfo">删除</el-button>
       </el-form-item>
     </el-form>
-    <el-table ref="multipleTableRef" :height="domHeight" :data="warninginfo" style="width: 100%">
+    <el-table
+      ref="multipleTableRef"
+      @row-click="onRowClick"
+      :height="domHeight"
+      :data="warninginfo"
+      style="width: 100%"
+    >
       <el-table-column type="selection" width="26" />
       <el-table-column align="center" type="index" width="55" label="序号" />
       <el-table-column align="center" prop="create_time" width="150" label="预警时间" />
@@ -33,8 +38,8 @@
             @change="updateStatus(row)"
             :disabled="row.status ? true : false"
           >
-            <el-option label="已处理" :value="3"></el-option>
-            <el-option label="误报" :value="2"></el-option>
+            <el-option label="已处理" :value="2"></el-option>
+            <el-option label="误报" :value="1"></el-option>
             <el-option label="未处理" :value="0"></el-option>
           </el-select>
         </template>
@@ -61,16 +66,23 @@
         @current-change="handleCurrentChange"
       />
     </div>
+    <template v-if="showImage">
+      <WarnDialog :show-image="showImage" :warn-info="clickedWarnInfo" @close="dialogeClose" />
+    </template>
   </div>
 </template>
 
 <script setup lang="ts">
+import WarnDialog from './WarnDialog.vue'
 import { reactive, ref, onMounted } from 'vue'
 import { getWarnList, deleteWarn, updateWarnStatus } from '@/api/project'
 import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { message } from 'ant-design-vue'
 import { project_global } from '@/root'
 import type MainMap from './module/MainMap'
+
+const showImage = ref(false)
+const clickedWarnInfo = ref<any>(null)
 
 // const centerDialogVisible = ref(true)
 // function isProcess() {
@@ -220,6 +232,16 @@ function deleteWarnInfo() {
 //   const data = await getWarnList({ page: 1, page_size: 20 })
 //   mapComp.value?.addPhotoPin(data.data.records)
 // }
+
+function onRowClick(row: any) {
+  clickedWarnInfo.value = row
+  showImage.value = true
+}
+
+function dialogeClose() {
+  clickedWarnInfo.value = null
+  showImage.value = false
+}
 
 const mapComp = ref<MainMap | null>(null)
 </script>

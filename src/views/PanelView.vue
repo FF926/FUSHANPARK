@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 09:19:55
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-14 13:43:22
+ * @LastEditTime: 2023-04-24 13:46:39
  * @FilePath: \ace-firefly\src\views\PanelView.vue
  * @Description: 
  * 
@@ -72,6 +72,7 @@ $hideWidth: -26%;
   }
   &.right {
     right: $hideWidth;
+    z-index: 0;
   }
 }
 .content {
