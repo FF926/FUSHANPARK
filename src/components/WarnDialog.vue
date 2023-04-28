@@ -1,3 +1,13 @@
+<!--
+ * @Author: chongyanlin chongyanlin@aceimage.com
+ * @Date: 2023-04-24 13:12:25
+ * @LastEditors: chongyanlin chongyanlin@aceimage.com
+ * @LastEditTime: 2023-04-25 17:14:29
+ * @FilePath: \ace-firefly\src\components\WarnDialog.vue
+ * @Description: 
+ * 
+ * Copyright (c) 2023 by ${git_name_email}, All Rights Reserved. 
+-->
 <!--  -->
 <template>
   <!-- <div class="wrapper" v-if="props.showImage">
@@ -27,9 +37,14 @@
 const props = defineProps<{ showImage: boolean; warnInfo: any }>()
 const emit = defineEmits(['close'])
 
-const img_url =
-  'http://47.104.134.41:9000/cloud-bucket/wayline/402b20a5-74c6-4c78-bd84-a7b7e52d1131/DJI_202304231706_013_402b20a5-74c6-4c78-bd84-a7b7e52d1131/DJI_20230423170741_0008_W.jpeg?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=minio%2F20230424%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20230424T025744Z&X-Amz-Expires=600000&X-Amz-SignedHeaders=host&X-Amz-Signature=e9e30f089b6e97cf225f5a504d964a46608f6c95df228793c64667055c18f124'
-const photos = [img_url, img_url]
+const minio = 'http://47.104.134.41:9000/cloud-bucket/'
+
+const _t =
+  'wayline/402b20a5-74c6-4c78-bd84-a7b7e52d1131/DJI_202304231706_013_402b20a5-74c6-4c78-bd84-a7b7e52d1131/DJI_20230423170759_0011_T.jpeg'
+
+const _w =
+  'snipImg/DJI_202304231706_013_402b20a5-74c6-4c78-bd84-a7b7e52d1131/DJI_20230423170759_0011_W.jpeg'
+const photos = [minio + _t, minio + _w]
 function close() {
   emit('close')
 }
