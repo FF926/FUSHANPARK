@@ -1,8 +1,8 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
- * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-04-22 17:29:32
+ * @LastEditors: chongyanlin chongyanlin@aceimage.com
+ * @LastEditTime: 2023-05-04 10:17:53
  * @FilePath: \ace-firefly\src\components\PanelManage.vue
  * @Description: 
  * 
@@ -11,11 +11,17 @@
 <!--  -->
 <template>
   <div class="main-box" ref="refPanelManage">
-    <el-form class="my-form" :model="form" label-width="120px">
-      <!-- <el-form-item label="时间范围">
-        <el-date-picker v-model="form.date" type="datetimerange" placeholder="请选择" />
-      </el-form-item> -->
+    <el-form class="my-form" :model="filter" label-width="120px">
+      <el-form-item label="时间范围">
+        <el-date-picker
+          v-model="filter.date"
+          type="datetimerange"
+          value-format="YYYY-MM-DD hh:mm:ss"
+          placeholder="请选择"
+        />
+      </el-form-item>
       <el-form-item>
+        <el-button type="primary" @click="getFiles">查询</el-button>
         <el-button type="primary" @click="selectAll">全选</el-button>
         <el-button type="danger" @click="doDelete">删除</el-button>
       </el-form-item>
@@ -139,8 +145,8 @@ function getFiles() {
 }
 
 // do not use same name with ref
-const form = reactive({
-  date: ''
+const filter = reactive({
+  date: [null, null]
 })
 
 function showDetail(idx: number, media: MediaFile) {

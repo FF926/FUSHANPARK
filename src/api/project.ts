@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-22 14:57:01
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-22 16:40:41
+ * @LastEditTime: 2023-05-04 09:32:16
  * @FilePath: \ace-firefly\src\api\project.ts
  * @Description:
  *
@@ -10,9 +10,9 @@
  */
 import request from '@/api/http/request'
 
-export async function getWarnList(body: { page: number; page_size: number }) {
-  const url = `/warn/getList?page=${body.page}&page_size=${body.page_size}`
-  const result = await request.get(url)
+export async function getWarnList(body: any) {
+  const url = `/warn/getList`
+  const result = await request.post(url, body)
   return result.data
 }
 

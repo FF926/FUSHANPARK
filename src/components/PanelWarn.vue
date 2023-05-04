@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-24 13:53:15
+ * @LastEditTime: 2023-05-04 10:07:47
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -10,11 +10,25 @@
 -->
 <template>
   <div class="main-box" ref="refPanelManage">
-    <el-form class="my-form" :model="form1" label-width="120px">
-      <!-- <el-form-item label="时间范围">
-        <el-date-picker v-model="form1.date" type="datetimerange" placeholder="请选择" />
-      </el-form-item> -->
+    <el-form class="my-form" :model="filter" label-width="120px">
+      <el-form-item label="时间范围">
+        <el-date-picker
+          v-model="filter.date"
+          type="datetimerange"
+          value-format="YYYY-MM-DD hh:mm:ss"
+          placeholder="请选择"
+        />
+      </el-form-item>
+      <el-form-item label="处理类型">
+        <el-select v-model="filter.type">
+          <el-option label="不限" :value="-1"></el-option>
+          <el-option label="已处理" :value="2"></el-option>
+          <el-option label="误报" :value="1"></el-option>
+          <el-option label="未处理" :value="0"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
+        <el-button type="primary" @click="getWarnings">查询</el-button>
         <el-button type="primary" @click="selectAll">全选</el-button>
         <el-button type="danger" @click="deleteWarnInfo">删除</el-button>
       </el-form-item>
@@ -150,8 +164,9 @@ interface WarningInfo {
 }
 const warninginfo = ref([] as WarningInfo[])
 // do not use same name with ref
-const form1 = reactive({
-  date: ''
+const filter = reactive({
+  date: [null, null],
+  type: -1
 })
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
 
@@ -177,7 +192,10 @@ function getWarnings() {
   const body = {
     page: paginationProp.current,
     total: 0,
-    page_size: paginationProp.pageSize
+    pageSize: paginationProp.pageSize,
+    date_start: filter.date[0],
+    date_end: filter.date[1],
+    type: filter.type
   }
   console.log(body)
 
