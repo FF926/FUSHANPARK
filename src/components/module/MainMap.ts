@@ -1,8 +1,8 @@
 /*
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2022-11-24 15:21:24
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-22 18:06:59
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-05-09 10:52:36
  * @FilePath: \ace-firefly\src\components\module\MainMap.ts
  * @Description:
  *
@@ -10,7 +10,7 @@
  */
 import * as OL from '@/extensions/OLConfig'
 import Feature from 'ol/Feature.js'
-
+import { Icon, Style } from 'ol/style'
 export default class MainMap {
   ready: boolean = false
   map: OL.prototype.Map.default
@@ -81,6 +81,16 @@ export default class MainMap {
       zoom: 15,
       duration: 600,
       center: this.center
+    })
+  }
+  setCenter(position: any) {
+    position = OL.prototype.Proj.fromLonLat(position, 'EPSG:3857')
+    console.log(position)
+
+    this.map.getView().animate({
+      zoom: 15,
+      duration: 600,
+      center: position
     })
   }
 
@@ -234,7 +244,24 @@ export default class MainMap {
         })
       })
     })
-
+    const fireStyle = new Style({
+      image: new Icon({
+        src: 'src/assets/icons/fire.png',
+        scale: 0.2
+      })
+    })
+    const processedStyle = new Style({
+      image: new Icon({
+        src: 'src/assets/icons/processed.png',
+        scale: 0.2
+      })
+    })
+    const falseAlarmStyle = new Style({
+      image: new Icon({
+        src: 'src/assets/icons/falseAlarm.png',
+        scale: 0.2
+      })
+    })
     coord.forEach((item: any) => {
       const geometry = new OL.prototype.Geom.Point(
         OL.prototype.Proj.fromLonLat([item.longitude, item.latitude], 'EPSG:3857')
@@ -243,8 +270,22 @@ export default class MainMap {
       const f = new Feature({
         geometry
       })
+      f.setId(item.id)
       f.setProperties({ ...item })
-      f.setStyle(style)
+      console.log(item)
+      switch (item.status) {
+        case 0:
+          f.setStyle(fireStyle)
+          break
+        case 1:
+          f.setStyle(falseAlarmStyle)
+          break
+        case 2:
+          f.setStyle(processedStyle)
+          break
+        default:
+          break
+      }
 
       ly[0].getSource()?.addFeature(f)
 

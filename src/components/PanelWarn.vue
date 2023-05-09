@@ -1,8 +1,8 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-05-04 10:07:47
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-05-09 14:37:27
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -94,10 +94,10 @@ import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { message } from 'ant-design-vue'
 import { project_global } from '@/root'
 import type MainMap from './module/MainMap'
-
+import type { Feature } from 'ol'
 const showImage = ref(false)
 const clickedWarnInfo = ref<any>(null)
-
+const picturePath = ref<any>(null)
 // const centerDialogVisible = ref(true)
 // function isProcess() {
 //   console.log(111)
@@ -130,28 +130,6 @@ const paginationProp = reactive({
 //       })
 //     })
 // }
-const options = [
-  {
-    value: 'Option1',
-    label: 'Option1'
-  },
-  {
-    value: 'Option2',
-    label: 'Option2'
-  },
-  {
-    value: 'Option3',
-    label: 'Option3'
-  },
-  {
-    value: 'Option4',
-    label: 'Option4'
-  },
-  {
-    value: 'Option5',
-    label: 'Option5'
-  }
-]
 interface WarningInfo {
   id: number
   picture_file: string
@@ -175,28 +153,64 @@ function selectAll() {
 }
 const refPanelManage = ref<HTMLDivElement>()
 const domHeight = ref(0)
-
 onMounted(() => {
   getWarnings()
   domHeight.value = refPanelManage.value?.offsetHeight! + 450
   mapComp.value = project_global.$map
   mapComp.value?.addClickListenerToLayer('photoLayer', (feature) => {
-    console.log(feature)
+    /* ------点击预警要素弹出照片------ */
+    onWarnClick(feature.features[0].getProperties())
   })
+  // mapComp.value?.addPhotoPin(warninginfo.value)
 })
 
 function handleSizeChange() {
   getWarnings()
 }
 function getWarnings() {
+  console.log(filter)
+
   const body = {
-    page: paginationProp.current,
-    total: 0,
-    pageSize: paginationProp.pageSize,
-    date_start: filter.date[0],
-    date_end: filter.date[1],
-    type: filter.type
+    Filters: [
+      /* 等于-1查询全部 */
+      filter.type == -1
+        ? {
+            field: 'status',
+            op: 'ne',
+            term: filter.type
+          }
+        : {
+            field: 'status',
+            op: 'eq',
+            term: filter.type
+          },
+      filter.date[0]
+        ? {
+            field: 'create_time',
+            op: 'ge', //大于等于
+            term: filter.date[0]
+          }
+        : {
+            field: 'create_time',
+            op: 'ne', //不等于
+            term: '2000-01-01'
+          },
+      filter.date[1]
+        ? {
+            field: 'create_time',
+            op: 'le', //小于等于
+            term: filter.date[1]
+          }
+        : {
+            field: 'create_time',
+            op: 'ne', //不等于
+            term: '2000-01-01'
+          }
+    ],
+    index: paginationProp.current,
+    size: paginationProp.pageSize
   }
+
   console.log(body)
 
   getWarnList(body).then((res) => {
@@ -223,7 +237,7 @@ function updateStatus(row: any) {
       message.success('状态更新成功')
       getWarnings()
     } else {
-      message.error('状更新失败')
+      message.error('状态更新失败')
     }
   })
 }
@@ -251,9 +265,36 @@ function deleteWarnInfo() {
 //   mapComp.value?.addPhotoPin(data.data.records)
 // }
 
-function onRowClick(row: any) {
+function onWarnClick(row: any) {
   clickedWarnInfo.value = row
   showImage.value = true
+}
+function onRowClick(row: any) {
+  // var wh = [114.3, 30.5]
+  // view.setCenter(wh)
+  // view.setZoom(5)
+  clickedWarnInfo.value = row
+  mapComp.value?.setCenter([clickedWarnInfo.value.longitude, clickedWarnInfo.value.latitude])
+  const ly = mapComp.value?.getTempVecLayer('photoLayer')
+  console.log(ly[0].getSource().getFeatureById(row.id))
+  const warnFeature = ly[0].getSource().getFeatureById(row.id)
+  // showImage.value = true
+  /* ------点击该行对应的数据闪烁------ */
+  // 定义计数器和计时器
+  let count = 0
+  const timer = setInterval(function () {
+    if (count % 2 === 0) {
+      warnFeature?.getStyle()?.getImage().setOpacity(0.1)
+      warnFeature?.changed()
+    } else {
+      warnFeature?.getStyle()?.getImage().setOpacity(1)
+      warnFeature?.changed()
+    }
+    count++
+    if (count > 5) {
+      clearInterval(timer)
+    }
+  }, 300)
 }
 
 function dialogeClose() {
