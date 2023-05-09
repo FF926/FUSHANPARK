@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-09 14:37:27
+ * @LastEditTime: 2023-05-09 15:27:03
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -155,7 +155,7 @@ const refPanelManage = ref<HTMLDivElement>()
 const domHeight = ref(0)
 onMounted(() => {
   getWarnings()
-  domHeight.value = refPanelManage.value?.offsetHeight! + 450
+  domHeight.value = refPanelManage.value?.offsetHeight!+375
   mapComp.value = project_global.$map
   mapComp.value?.addClickListenerToLayer('photoLayer', (feature) => {
     /* ------点击预警要素弹出照片------ */
