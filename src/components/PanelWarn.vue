@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-09 15:27:03
+ * @LastEditTime: 2023-05-09 15:34:19
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -41,8 +41,8 @@
       style="width: 100%"
     >
       <el-table-column type="selection" width="26" />
-      <el-table-column align="center" type="index" width="55" label="序号" />
-      <el-table-column align="center" prop="create_time" width="150" label="预警时间" />
+      <el-table-column align="center" type="index" width="53" label="序号" />
+      <el-table-column align="center" prop="create_time" width="100" label="预警时间" />
       <el-table-column align="center" prop="longitude" width="98" label="经度" />
       <el-table-column align="center" prop="latitude" width="98" label="纬度" />
       <el-table-column prop="status" width="105" label="处理状态">
@@ -155,7 +155,7 @@ const refPanelManage = ref<HTMLDivElement>()
 const domHeight = ref(0)
 onMounted(() => {
   getWarnings()
-  domHeight.value = refPanelManage.value?.offsetHeight!+375
+  domHeight.value = refPanelManage.value?.offsetHeight! + 375
   mapComp.value = project_global.$map
   mapComp.value?.addClickListenerToLayer('photoLayer', (feature) => {
     /* ------点击预警要素弹出照片------ */
