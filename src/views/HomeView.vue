@@ -1,8 +1,8 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-12 09:20:07
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-22 16:56:06
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-05-12 10:03:36
  * @FilePath: \ace-firefly\src\views\HomeView.vue
  * @Description: 
  * 
@@ -24,12 +24,14 @@ import HeaderView from '../components/HeaderView.vue'
 import FooterView from '../components/FooterView.vue'
 import MainMap from '../components/MainMap.vue'
 import PanelView from './PanelView.vue'
-
+import emitter from '@/event-bus'
 export type stateTypes = 'live' | 'warn' | 'manage'
 let curState = ref<stateTypes>('warn')
 
 function switchState(state: stateTypes) {
   curState.value = state
+  console.log(state)
+  emitter.emit('panelChange', state)
 }
 </script>
 

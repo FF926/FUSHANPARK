@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-09 15:34:19
+ * @LastEditTime: 2023-05-12 10:04:27
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -95,6 +95,7 @@ import { message } from 'ant-design-vue'
 import { project_global } from '@/root'
 import type MainMap from './module/MainMap'
 import type { Feature } from 'ol'
+import emitter from '@/event-bus'
 const showImage = ref(false)
 const clickedWarnInfo = ref<any>(null)
 const picturePath = ref<any>(null)
@@ -154,6 +155,12 @@ function selectAll() {
 const refPanelManage = ref<HTMLDivElement>()
 const domHeight = ref(0)
 onMounted(() => {
+  emitter.on('panelChange', (e) => {
+    if (e == 'warn') {
+      console.log(e)
+      getWarnings()
+    }
+  })
   getWarnings()
   domHeight.value = refPanelManage.value?.offsetHeight! + 375
   mapComp.value = project_global.$map

@@ -15,6 +15,16 @@ export async function getWarnList(body: any) {
   const result = await request.post(url, body)
   return result.data
 }
+export async function getJobFile(body: any) {
+  const url = `/warn/jobFile`
+  const result = await request.post(url, body)
+  return result.data
+}
+export async function getWayLineJob(body: any) {
+  const url = `/warn/waylineJob`
+  const result = await request.post(url, body)
+  return result.data
+}
 
 /**
  * 更新预警状态

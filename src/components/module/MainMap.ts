@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2022-11-24 15:21:24
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-09 10:52:36
+ * @LastEditTime: 2023-05-12 08:40:32
  * @FilePath: \ace-firefly\src\components\module\MainMap.ts
  * @Description:
  *
@@ -232,16 +232,10 @@ export default class MainMap {
     const ly = this.getTempVecLayer('photoLayer')
     ly[0].getSource()?.clear()
 
-    const style = new OL.prototype.Style.Style({
-      image: new OL.prototype.Style.Circle({
-        radius: 7,
-        fill: new OL.prototype.Style.Fill({
-          color: '#ffcc33'
-        }),
-        stroke: new OL.prototype.Style.Stroke({
-          color: '#ff0000',
-          width: 1
-        })
+    const style = new Style({
+      image: new Icon({
+        src: 'src/assets/icons/fire.png',
+        scale: 0.2
       })
     })
     const fireStyle = new Style({
@@ -263,6 +257,12 @@ export default class MainMap {
       })
     })
     coord.forEach((item: any) => {
+      console.log('item', item)
+
+      if (item.lon) {
+        item.longitude = item.lon
+        item.latitude = item.lat
+      }
       const geometry = new OL.prototype.Geom.Point(
         OL.prototype.Proj.fromLonLat([item.longitude, item.latitude], 'EPSG:3857')
       )
@@ -272,7 +272,6 @@ export default class MainMap {
       })
       f.setId(item.id)
       f.setProperties({ ...item })
-      console.log(item)
       switch (item.status) {
         case 0:
           f.setStyle(fireStyle)
@@ -284,6 +283,8 @@ export default class MainMap {
           f.setStyle(processedStyle)
           break
         default:
+          f.setId(Number(item.lat))
+          f.setStyle(style)
           break
       }
 

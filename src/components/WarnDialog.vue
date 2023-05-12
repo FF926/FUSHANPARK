@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-24 13:12:25
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-09 09:02:35
+ * @LastEditTime: 2023-05-12 08:55:14
  * @FilePath: \ace-firefly\src\components\WarnDialog.vue
  * @Description: 
  * 
@@ -49,16 +49,24 @@ function close() {
 function onCreated() {
   if (props.warnInfo) {
     console.log(props.warnInfo)
-    _t.value = props.warnInfo.tfile
-    _w.value = props.warnInfo.wfile
-    orgin_tfile.value = props.warnInfo.origin_tfile
-    orgin_wfile.value = props.warnInfo.origin_wfile
-    photos.value = [
-      minio + _t.value,
-      minio + _w.value,
-      minio + orgin_tfile.value,
-      minio + orgin_wfile.value
-    ]
+    /* 是否有file数组 */
+    if (!props.warnInfo.files) {
+      _t.value = props.warnInfo.tfile
+      _w.value = props.warnInfo.wfile
+      orgin_tfile.value = props.warnInfo.origin_tfile
+      orgin_wfile.value = props.warnInfo.origin_wfile
+      photos.value = [
+        minio + _t.value,
+        minio + _w.value,
+        minio + orgin_tfile.value,
+        minio + orgin_wfile.value
+      ]
+    } else {
+      props.warnInfo.files.forEach((e: any) => {
+        photos.value.push(minio + e.object_key)
+      })
+    }
+
     console.log(photos.value)
   }
 }

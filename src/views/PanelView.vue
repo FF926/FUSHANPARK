@@ -1,8 +1,8 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 09:19:55
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-04-24 13:46:39
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-05-12 09:12:14
  * @FilePath: \ace-firefly\src\views\PanelView.vue
  * @Description: 
  * 
