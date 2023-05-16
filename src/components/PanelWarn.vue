@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-12 10:04:27
+ * @LastEditTime: 2023-05-16 10:21:19
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -94,6 +94,7 @@ import { ElMessage, ElMessageBox, ElTable } from 'element-plus'
 import { message } from 'ant-design-vue'
 import { project_global } from '@/root'
 import type MainMap from './module/MainMap'
+import { Icon, Style } from 'ol/style'
 import type { Feature } from 'ol'
 import emitter from '@/event-bus'
 const showImage = ref(false)
@@ -276,25 +277,35 @@ function onWarnClick(row: any) {
   clickedWarnInfo.value = row
   showImage.value = true
 }
+const flag = ref(true)
 function onRowClick(row: any) {
-  // var wh = [114.3, 30.5]
-  // view.setCenter(wh)
-  // view.setZoom(5)
+  if (!flag.value) {
+    return
+  }
+  flag.value = false
+  setTimeout(() => {
+    flag.value = true
+  }, 1000) // 1秒后将标志位设为true
   clickedWarnInfo.value = row
   mapComp.value?.setCenter([clickedWarnInfo.value.longitude, clickedWarnInfo.value.latitude])
   const ly = mapComp.value?.getTempVecLayer('photoLayer')
-  console.log(ly[0].getSource().getFeatureById(row.id))
   const warnFeature = ly[0].getSource().getFeatureById(row.id)
+  const style = warnFeature?.getStyle()
+  console.log(style.image_.opacity_)
+
+  const styleOpacity = style.clone()
+  styleOpacity.image_.opacity_ = 0.1
   // showImage.value = true
   /* ------点击该行对应的数据闪烁------ */
   // 定义计数器和计时器
   let count = 0
   const timer = setInterval(function () {
     if (count % 2 === 0) {
-      warnFeature?.getStyle()?.getImage().setOpacity(0.1)
+      warnFeature?.setStyle(styleOpacity)
+      // console.log(warnFeature?.getStyle()?.getImage())
       warnFeature?.changed()
     } else {
-      warnFeature?.getStyle()?.getImage().setOpacity(1)
+      warnFeature?.setStyle(style)
       warnFeature?.changed()
     }
     count++

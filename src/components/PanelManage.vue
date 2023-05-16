@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-12 10:08:10
+ * @LastEditTime: 2023-05-16 11:17:06
  * @FilePath: \ace-firefly\src\components\PanelManage.vue
  * @Description: 
  * 
@@ -75,12 +75,13 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { ElTable } from 'element-plus'
 import { downloadMediaFile, getMediaFiles } from '@/api/media'
 import { downloadFile } from '@/utils/common'
-import { getJobFile, getWayLineJob } from '@/api/project'
+import { getJobFile, getWayLineJob, delMedia } from '@/api/project'
 import { last } from 'lodash'
 import { project_global } from '@/root'
 import type MainMap from './module/MainMap'
 import { login } from '@/api/manage'
 import emitter from '@/event-bus'
+import { Icon, Style } from 'ol/style'
 
 const workspaceId = localStorage.getItem('workspace_id')!
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
@@ -222,31 +223,43 @@ function getFiles(job_id?: string) {
 }
 /* job_id持久化 */
 const job_id = ref()
+const flag = ref(true)
 function onRowClick(row: any) {
+  if (!flag.value) {
+    return
+  }
+  flag.value = false
+  setTimeout(() => {
+    flag.value = true
+  }, 1000) // 1秒后将标志位设为true
+
   if (!pictureFlag.value) {
     /* 进入照片页面 */
     pictureFlag.value = true
     job_id.value = row.job_id
     getFiles(job_id.value)
   } else {
-    console.log(row)
+    // console.log(row)
     clickedWarnInfo.value = row
     mapComp.value?.setCenter([clickedWarnInfo.value.longitude, clickedWarnInfo.value.latitude])
     const ly = mapComp.value?.getTempVecLayer('photoLayer')
     const warnFeature = ly[0].getSource().getFeatureById(row.lat)
-    console.log('warnFeature', warnFeature)
+    const style = warnFeature?.getStyle()
+    console.log(style.image_.opacity_)
 
+    const styleOpacity = style.clone()
+    styleOpacity.image_.opacity_ = 0.1
     // showImage.value = true
     /* ------点击该行对应的数据闪烁------ */
     // 定义计数器和计时器
     let count = 0
     const timer = setInterval(function () {
       if (count % 2 === 0) {
-        warnFeature?.getStyle()?.getImage().setOpacity(0.1)
-        console.log(warnFeature?.getStyle()?.getImage())
+        warnFeature?.setStyle(styleOpacity)
+        // console.log(warnFeature?.getStyle()?.getImage())
         warnFeature?.changed()
       } else {
-        warnFeature?.getStyle()?.getImage().setOpacity(1)
+        warnFeature?.setStyle(style)
         warnFeature?.changed()
       }
       count++
@@ -277,6 +290,8 @@ function selectAll() {
 
 function doDelete() {
   const selected = multipleTableRef.value!.getSelectionRows()
+  console.log('selected', selected)
+
   if (!selected || selected.length < 1) {
     ElMessage({
       type: 'info',
@@ -284,9 +299,19 @@ function doDelete() {
     })
     return
   }
-  ElMessageBox.confirm('确认删除选中的图片？')
+  ElMessageBox.confirm('删除后不可恢复, 请确认?')
     .then(() => {
-      console.log(selected)
+      selected.forEach((element: any) => {
+        const body = {
+          jobId: element.job_id,
+          files: [{}]
+        }
+        console.log(body)
+        delMedia(body).then((res) => {
+          console.log('res', res)
+        })
+      })
+
       ElMessage({
         type: 'success',
         message: '删除成功'

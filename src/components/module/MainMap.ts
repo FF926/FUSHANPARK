@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2022-11-24 15:21:24
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-12 08:40:32
+ * @LastEditTime: 2023-05-15 13:39:15
  * @FilePath: \ace-firefly\src\components\module\MainMap.ts
  * @Description:
  *
@@ -88,7 +88,7 @@ export default class MainMap {
     console.log(position)
 
     this.map.getView().animate({
-      zoom: 15,
+      zoom: 21,
       duration: 600,
       center: position
     })
@@ -234,7 +234,7 @@ export default class MainMap {
 
     const style = new Style({
       image: new Icon({
-        src: 'src/assets/icons/fire.png',
+        src: 'src/assets/icons/picture.png',
         scale: 0.2
       })
     })

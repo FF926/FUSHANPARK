@@ -1,8 +1,8 @@
 /*
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-22 14:57:01
- * @LastEditors: chongyanlin chongyanlin@aceimage.com
- * @LastEditTime: 2023-05-04 09:32:16
+ * @LastEditors: QingHe meet_fqh@163.com
+ * @LastEditTime: 2023-05-16 10:59:23
  * @FilePath: \ace-firefly\src\api\project.ts
  * @Description:
  *
@@ -44,6 +44,16 @@ export async function updateWarnStatus(body: { id: number; status: 1 | 2 | 3 }) 
  */
 export async function deleteWarn(body: { id: number }) {
   const url = `/warn/delById?id=${body.id}`
+  const result = await request.post(url)
+  return result.data
+}
+/**
+ * 删除照片
+ * @param body
+ * @returns
+ */
+export async function delMedia(body: { jobId?: string; flies?: [] }) {
+  const url = `/warn/delMedia`
   const result = await request.post(url)
   return result.data
 }
