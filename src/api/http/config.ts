@@ -16,12 +16,12 @@ export const CURRENT_CONFIG = {
     'Ji9GxnEraiVDyTVtzST+E+hhbCZ0/jU2eYuM9Vq0tINLJ4jGVJH3oRaIrV2CwNfadpRxmY7qoeZ4rxi+bNNVwAy0v6TKsx14Ff9/FBtSr0qZ7kP5EdfI55gMbI9mKhc8XqMfqeVwegBqlCW/+jdJRlhzKWcvLLZmra9TYoYtZio=', // You need to go to the development website to apply.
 
   // http
-  baseURL: 'http://47.104.134.41:6789/', // This url must end with "/". Example: 'http://192.168.1.1:6789/'
-  websocketURL: 'ws://47.104.134.41:6789/api/v1/ws', // Example: 'ws://192.168.1.1:6789/api/v1/ws'
+  baseURL: 'http://47.104.2.61:6789/', // This url must end with "/". Example: 'http://192.168.1.1:6789/'
+  websocketURL: 'ws://47.104.2.61:6789/api/v1/ws', // Example: 'ws://192.168.1.1:6789/api/v1/ws'
 
   // livestreaming
   // RTMP  Note: This IP is the address of the streaming server. If you want to see livestream on web page, you need to convert the RTMP stream to WebRTC stream.
-  rtmpURL: 'rtmp://47.104.134.41/live/', // Example: 'rtmp://192.168.1.1/live/'
+  rtmpURL: 'rtmp://47.104.2.61/live/', // Example: 'rtmp://192.168.1.1/live/'
   // rtmpURL: 'rtmp://192.168.1.15/live/', // Example: 'rtmp://192.168.1.1/live/'
 
   // GB28181 Note:If you don't know what these parameters mean, you can go to Pilot2 and select the GB28181 page in the cloud platform. Where the parameters same as these parameters.

@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-22 14:57:01
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-16 10:59:23
+ * @LastEditTime: 2023-05-24 08:17:16
  * @FilePath: \ace-firefly\src\api\project.ts
  * @Description:
  *
@@ -52,8 +52,10 @@ export async function deleteWarn(body: { id: number }) {
  * @param body
  * @returns
  */
-export async function delMedia(body: { jobId?: string; flies?: [] }) {
+export async function delMedia(body: { job_id?: string; files?: [] }) {
+  console.log('body', body)
+
   const url = `/warn/delMedia`
-  const result = await request.post(url)
+  const result = await request.post(url, body)
   return result.data
 }

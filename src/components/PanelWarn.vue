@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-16 10:21:19
+ * @LastEditTime: 2023-05-23 14:34:32
  * @FilePath: \ace-firefly\src\components\PanelWarn.vue
  * @Description: 
  * 
@@ -15,7 +15,7 @@
         <el-date-picker
           v-model="filter.date"
           type="datetimerange"
-          value-format="YYYY-MM-DD hh:mm:ss"
+          value-format="YYYY-MM-DD  HH:mm:ss"
           placeholder="请选择"
         />
       </el-form-item>
@@ -145,7 +145,7 @@ interface WarningInfo {
 const warninginfo = ref([] as WarningInfo[])
 // do not use same name with ref
 const filter = reactive({
-  date: [null, null],
+  date: null,
   type: -1
 })
 const multipleTableRef = ref<InstanceType<typeof ElTable>>()
@@ -192,7 +192,7 @@ function getWarnings() {
             op: 'eq',
             term: filter.type
           },
-      filter.date[0]
+      filter.date != null
         ? {
             field: 'create_time',
             op: 'ge', //大于等于
@@ -203,7 +203,7 @@ function getWarnings() {
             op: 'ne', //不等于
             term: '2000-01-01'
           },
-      filter.date[1]
+      filter.date != null
         ? {
             field: 'create_time',
             op: 'le', //小于等于
@@ -214,6 +214,12 @@ function getWarnings() {
             op: 'ne', //不等于
             term: '2000-01-01'
           }
+    ],
+    sorts: [
+      {
+        field: 'create_time',
+        sort: 'DESC'
+      }
     ],
     index: paginationProp.current,
     size: paginationProp.pageSize

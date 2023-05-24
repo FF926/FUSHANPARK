@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-16 11:17:06
+ * @LastEditTime: 2023-05-24 09:13:26
  * @FilePath: \ace-firefly\src\components\PanelManage.vue
  * @Description: 
  * 
@@ -16,12 +16,12 @@
         <el-date-picker
           v-model="filter.date"
           type="datetimerange"
-          value-format="YYYY-MM-DD hh:mm:ss"
+          value-format="YYYY-MM-DD  HH:mm:ss"
           placeholder="请选择"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="getFiles">查询</el-button>
+        <el-button type="primary" @click="handleSizeChange">查询</el-button>
         <el-button type="primary" @click="selectAll">全选</el-button>
         <el-button type="danger" @click="doDelete">删除</el-button>
       </el-form-item>
@@ -41,6 +41,14 @@
         :key="item.prop"
         :prop="item.prop"
         :label="item.label"
+      />
+      <el-table-column
+        v-if="!pictureFlag"
+        align="center"
+        prop="status"
+        width="53"
+        label="任务状态"
+        :formatter="formatter"
       />
       <!-- <el-table-column align="right">
         <template #default="scope">
@@ -62,12 +70,11 @@
         @current-change="handleCurrentChange"
       />
     </div>
-    <template v-if="showImage">
+    <!-- <template v-if="showImage">
       <WarnDialog :show-image="showImage" :warn-info="clickedWarnInfo" @close="dialogeClose" />
-    </template>
+    </template> -->
   </div>
 </template>
-
 <script setup lang="ts">
 import WarnDialog from './WarnDialog.vue'
 import { reactive, ref, onMounted } from 'vue'
@@ -75,6 +82,7 @@ import { ElMessageBox, ElMessage } from 'element-plus'
 import { ElTable } from 'element-plus'
 import { downloadMediaFile, getMediaFiles } from '@/api/media'
 import { downloadFile } from '@/utils/common'
+import { formatDayTime, formatUnixTime } from '@/utils/time'
 import { getJobFile, getWayLineJob, delMedia } from '@/api/project'
 import { last } from 'lodash'
 import { project_global } from '@/root'
@@ -101,7 +109,27 @@ const domHeight = ref(0)
 
 const dataTableCols = ref()
 const mapComp = ref<MainMap | null>(null)
-
+const formatter = (row: any, column: any, cellValue: any, index: number) => {
+  switch (cellValue) {
+    case 1:
+      return '待执行'
+      break
+    case 2:
+      return '执行中'
+      break
+    case 3:
+      return '完成'
+      break
+    case 4:
+      return '取消'
+      break
+    case 5:
+      return '失败'
+      break
+    default:
+      break
+  }
+}
 const flightTableCols = [
   {
     prop: 'name',
@@ -114,10 +142,6 @@ const flightTableCols = [
   {
     prop: 'media_count',
     label: '照片数量'
-  },
-  {
-    prop: 'status',
-    label: '任务状态'
   }
 ]
 const pictureTableCols = [
@@ -136,7 +160,7 @@ const pictureTableCols = [
 ]
 
 const mediaData = reactive({
-  data: []
+  data: [null, null]
 })
 
 onMounted(() => {
@@ -158,6 +182,8 @@ onMounted(() => {
 const showImage = ref(false)
 const clickedWarnInfo = ref<any>(null)
 function onWarnClick(row: any) {
+  console.log('row', row)
+
   clickedWarnInfo.value = row
   showImage.value = true
 }
@@ -177,22 +203,54 @@ function handleCurrentChange() {
 /* ------获取列表信息------ */
 const pictureFlag = ref(false)
 function getFiles(job_id?: string) {
+  console.log('job_id', job_id)
+
   if (!pictureFlag.value) {
+    console.log('filter', filter.date)
     /* ------获取架次信息------ */
     const body = {
+      Filters: [
+        filter.date != null
+          ? {
+              field: 'begin_time',
+              op: 'ge', //大于等于
+              term: formatDayTime(filter.date[0])
+            }
+          : {
+              field: 'begin_time',
+              op: 'ne', //不等于
+              term: '2000-01-01'
+            },
+        filter.date != null
+          ? {
+              field: 'begin_time',
+              op: 'le', //小于等于
+              term: formatDayTime(filter.date[1])
+            }
+          : {
+              field: 'begin_time',
+              op: 'ne', //不等于
+              term: '2000-01-01'
+            }
+      ],
       index: paginationProp.current,
       size: paginationProp.pageSize
     }
     console.log('body', body)
-
     getWayLineJob(body).then((res) => {
       console.log(res)
+      res.data.records.forEach((item: any) => {
+        item.begin_time = formatUnixTime(item.begin_time / 1000)
+        console.log(item.begin_time)
+      })
       mediaData.data = res.data.records
       paginationProp.total = res.data.total
+
       dataTableCols.value = flightTableCols
     })
   } else {
     console.log('paginationProp', paginationProp)
+    console.log(filter.date)
 
     /* ------根据架次job_id获取该架次的详细信息------ */
     const body1 = {
@@ -203,11 +261,32 @@ function getFiles(job_id?: string) {
           field: 'job_id',
           op: 'eq',
           term: job_id
-        }
+        },
+        filter.date != null
+          ? {
+              field: 'create_time',
+              op: 'ge', //大于等于
+              term: String(formatDayTime(filter.date[0]))
+            }
+          : {
+              field: 'create_time',
+              op: 'ne', //不等于
+              term: '2000-01-01'
+            },
+        filter.date != null
+          ? {
+              field: 'create_time',
+              op: 'le', //小于等于
+              term: String(formatDayTime(filter.date[1]))
+            }
+          : {
+              field: 'create_time',
+              op: 'ne', //不等于
+              term: '2000-01-01'
+            }
       ]
     }
     console.log('body1', body1)
-
     getJobFile(body1).then((res) => {
       console.log(res)
       mediaData.data = res.data.records
@@ -271,7 +350,7 @@ function onRowClick(row: any) {
 }
 // do not use same name with ref
 const filter = reactive({
-  date: [null, null]
+  date: null
 })
 
 // function showDetail(idx: number, media: MediaFile) {
@@ -295,28 +374,56 @@ function doDelete() {
   if (!selected || selected.length < 1) {
     ElMessage({
       type: 'info',
-      message: '请选择需要删除的图片'
+      message: '请选择需要删除的数据'
     })
     return
   }
   ElMessageBox.confirm('删除后不可恢复, 请确认?')
     .then(() => {
-      selected.forEach((element: any) => {
+      if (pictureFlag.value) {
+        let files: any = []
+        selected.forEach((element: any) => {
+          files.push(...element.files)
+          console.log('files', files)
+        })
         const body = {
-          jobId: element.job_id,
-          files: [{}]
+          files: files
         }
-        console.log(body)
+        console.log('body', body)
         delMedia(body).then((res) => {
           console.log('res', res)
+          if (res.message === 'success') {
+            getFiles(job_id.value)
+            ElMessage({
+              type: 'success',
+              message: '删除成功'
+            })
+            multipleTableRef.value!.clearSelection()
+          }
         })
-      })
+      } else {
+        let job_ids: any = []
+        selected.forEach((element: any) => {
+          console.log('element', element)
+          job_ids.push(element.job_id)
+        })
+        const body = {
+          job_id: job_ids
+        }
+        console.log('body', body)
 
-      ElMessage({
-        type: 'success',
-        message: '删除成功'
-      })
-      multipleTableRef.value!.clearSelection()
+        delMedia(body).then((res) => {
+          console.log('res', res)
+          if (res.message === 'success') {
+            getFiles()
+            ElMessage({
+              type: 'success',
+              message: '删除成功'
+            })
+            multipleTableRef.value!.clearSelection()
+          }
+        })
+      }
     })
     .catch(() => {
       ElMessage({

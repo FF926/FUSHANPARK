@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-24 13:12:25
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-12 08:55:14
+ * @LastEditTime: 2023-05-22 08:48:37
  * @FilePath: \ace-firefly\src\components\WarnDialog.vue
  * @Description: 
  * 
@@ -37,7 +37,7 @@
 import { ref } from 'vue'
 const props = defineProps<{ showImage: boolean; warnInfo: any }>()
 const emit = defineEmits(['close'])
-const minio = 'http://47.104.134.41:9000/cloud-bucket/'
+const minio = 'http://47.104.2.61:9000/cloud-bucket/'
 const _t = ref()
 const _w = ref()
 const orgin_tfile = ref()
@@ -66,7 +66,6 @@ function onCreated() {
         photos.value.push(minio + e.object_key)
       })
     }
-
     console.log(photos.value)
   }
 }

@@ -2,7 +2,7 @@
  * @Author: error: git config user.name && git config user.email & please set dead value or install git
  * @Date: 2022-11-21 16:19:30
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-04-13 13:26:20
+ * @LastEditTime: 2023-05-24 08:45:11
  * @FilePath: \ace-firefly\src\components\HeaderView.vue
  * @Description: 
  * 
@@ -17,7 +17,10 @@ import { FALSE } from 'ol/functions'
 const task = ref<InstanceType<typeof PlanTask>>() //泛类型   <typeof>
 /* 开启弹窗 */
 const handleTask = () => {
-  task.value.visible = !task.value?.visible
+  // task.value.visible = !task.value?.visible
+  let url = '192.168.1.20:8080/tsa' // 这里的地址前面就不用加协议了'http:// 或者 https://' 
+  let path = window.location.protocol + '//' + url
+  window.location.href = path
 }
 const title = ref('浮山公园无人机智慧防火平台')
 
@@ -69,7 +72,11 @@ function isFullscreen(): boolean {
     <div class="title">
       {{ title }}
     </div>
-    <CalendarOutlined @click="handleTask" :style="{ fontSize: '24px', color: '#47dbe7' }" class="item h-btn" />
+    <CalendarOutlined
+      @click="handleTask"
+      :style="{ fontSize: '24px', color: '#47dbe7' }"
+      class="item h-btn"
+    />
     <div class="item home h-btn" title="返回首页">
       <span class="icon"></span>
     </div>
@@ -78,7 +85,7 @@ function isFullscreen(): boolean {
     </div>
     <DigitalClock class="item h-btn" />
   </div>
-  <PlanTask ref="task"/>
+  <PlanTask ref="task" />
 </template>
 <style scoped lang="scss">
 $greenGlow: #21f3e2;
