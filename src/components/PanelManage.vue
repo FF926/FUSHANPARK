@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-05-24 09:13:26
+ * @LastEditTime: 2023-06-06 09:22:56
  * @FilePath: \ace-firefly\src\components\PanelManage.vue
  * @Description: 
  * 
@@ -167,6 +167,7 @@ onMounted(() => {
   emitter.on('panelChange', (e) => {
     if (e == 'manage') {
       console.log(e)
+      flag.value = true
       pictureFlag.value = false
       getFiles()
     }
@@ -297,6 +298,7 @@ function getFiles(job_id?: string) {
       dataTableCols.value = pictureTableCols
       /* 进入照片页面 */
       pictureFlag.value = true
+      flag.value = true
     })
   }
 }
@@ -308,9 +310,9 @@ function onRowClick(row: any) {
     return
   }
   flag.value = false
-  setTimeout(() => {
-    flag.value = true
-  }, 1000) // 1秒后将标志位设为true
+  // setTimeout(() => {
+  //   flag.value = true
+  // }, 1000) // 1秒后将标志位设为true
 
   if (!pictureFlag.value) {
     /* 进入照片页面 */

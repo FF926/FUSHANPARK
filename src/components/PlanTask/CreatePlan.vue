@@ -203,22 +203,22 @@ const drawerVisible = ref(false)
 const valueRef = ref()
 const rules = {
   name: [
-    { required: true, message: 'Please enter plan name.' },
-    { max: 20, message: 'Length should be 1 to 20', trigger: 'blur' }
+    { required: true, message: '请输入计划名称.' },
+    { max: 20, message: '最多输入20个字符', trigger: 'blur' }
   ],
-  file_id: [{ required: true, message: 'Select Route' }],
-  dock_sn: [{ required: true, message: 'Select Device' }],
-  select_execute_time: [{ required: true, message: 'Select start time' }],
+  file_id: [{ required: true, message: '请选择航线' }],
+  dock_sn: [{ required: true, message: '请选择设备' }],
+  select_execute_time: [{ required: true, message: '请选择开始时间' }],
   rth_altitude: [
     {
       validator: async (rule: RuleObject, value: string) => {
         if (!/^[0-9]{1,}$/.test(value)) {
-          throw new Error('RTH Altitude Relative Require number')
+          throw new Error('请输入数字')
         }
       }
     }
   ],
-  out_of_control_action: [{ required: true, message: 'Select Lost Action' }]
+  out_of_control_action: [{ required: true, message: '请选择失控动作' }]
 }
 
 function onSubmit() {
