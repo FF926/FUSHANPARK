@@ -2,7 +2,7 @@
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
  * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-06-06 09:22:56
+ * @LastEditTime: 2023-06-06 15:19:01
  * @FilePath: \ace-firefly\src\components\PanelManage.vue
  * @Description: 
  * 
@@ -306,6 +306,8 @@ function getFiles(job_id?: string) {
 const job_id = ref()
 const flag = ref(true)
 function onRowClick(row: any) {
+  console.log('flag.value', flag.value)
+
   if (!flag.value) {
     return
   }
@@ -313,7 +315,7 @@ function onRowClick(row: any) {
   // setTimeout(() => {
   //   flag.value = true
   // }, 1000) // 1秒后将标志位设为true
-
+  /* 非照片页面 */
   if (!pictureFlag.value) {
     /* 进入照片页面 */
     pictureFlag.value = true
@@ -322,6 +324,8 @@ function onRowClick(row: any) {
   } else {
     // console.log(row)
     clickedWarnInfo.value = row
+    flag.value = true
+
     mapComp.value?.setCenter([clickedWarnInfo.value.longitude, clickedWarnInfo.value.latitude])
     const ly = mapComp.value?.getTempVecLayer('photoLayer')
     const warnFeature = ly[0].getSource().getFeatureById(row.lat)
