@@ -1,8 +1,8 @@
 <!--
  * @Author: chongyanlin chongyanlin@aceimage.com
  * @Date: 2023-04-14 08:46:33
- * @LastEditors: QingHe meet_fqh@163.com
- * @LastEditTime: 2023-06-06 15:19:01
+ * @LastEditors: 冯庆贺 meet_fqh@163.com
+ * @LastEditTime: 2023-06-09 15:08:52
  * @FilePath: \ace-firefly\src\components\PanelManage.vue
  * @Description: 
  * 
@@ -41,15 +41,16 @@
         :key="item.prop"
         :prop="item.prop"
         :label="item.label"
+        :formatter="item.formatter"
       />
-      <el-table-column
+      <!-- <el-table-column
         v-if="!pictureFlag"
         align="center"
         prop="status"
         width="53"
         label="任务状态"
         :formatter="formatter"
-      />
+      /> -->
       <!-- <el-table-column align="right">
         <template #default="scope">
           <el-button size="small" :text="true" @click="showDetail(scope.$index, scope.row)"
@@ -109,27 +110,6 @@ const domHeight = ref(0)
 
 const dataTableCols = ref()
 const mapComp = ref<MainMap | null>(null)
-const formatter = (row: any, column: any, cellValue: any, index: number) => {
-  switch (cellValue) {
-    case 1:
-      return '待执行'
-      break
-    case 2:
-      return '执行中'
-      break
-    case 3:
-      return '完成'
-      break
-    case 4:
-      return '取消'
-      break
-    case 5:
-      return '失败'
-      break
-    default:
-      break
-  }
-}
 const flightTableCols = [
   {
     prop: 'name',
@@ -142,6 +122,31 @@ const flightTableCols = [
   {
     prop: 'media_count',
     label: '照片数量'
+  },
+  {
+    prop: 'status',
+    label: '任务状态',
+    formatter: (row: any, column: any, cellValue: any, index: number) => {
+      switch (cellValue) {
+        case 1:
+          return '待执行'
+          break
+        case 2:
+          return '执行中'
+          break
+        case 3:
+          return '完成'
+          break
+        case 4:
+          return '取消'
+          break
+        case 5:
+          return '失败'
+          break
+        default:
+          break
+      }
+    }
   }
 ]
 const pictureTableCols = [
@@ -155,7 +160,7 @@ const pictureTableCols = [
   },
   {
     prop: 'lat',
-    label: '纬度'
+    value: 'type'
   }
 ]
 
@@ -166,7 +171,6 @@ const mediaData = reactive({
 onMounted(() => {
   emitter.on('panelChange', (e) => {
     if (e == 'manage') {
-      console.log(e)
       flag.value = true
       pictureFlag.value = false
       getFiles()
@@ -246,6 +250,7 @@ function getFiles(job_id?: string) {
       })
       mediaData.data = res.data.records
       paginationProp.total = res.data.total
+      console.log(flightTableCols)
 
       dataTableCols.value = flightTableCols
     })
@@ -311,12 +316,15 @@ function onRowClick(row: any) {
   if (!flag.value) {
     return
   }
+  /*  */
   flag.value = false
   // setTimeout(() => {
   //   flag.value = true
   // }, 1000) // 1秒后将标志位设为true
   /* 非照片页面 */
   if (!pictureFlag.value) {
+    console.log('其味无穷')
+
     /* 进入照片页面 */
     pictureFlag.value = true
     job_id.value = row.job_id
@@ -414,7 +422,7 @@ function doDelete() {
           job_ids.push(element.job_id)
         })
         const body = {
-          job_id: job_ids
+          job_ids: job_ids
         }
         console.log('body', body)
 
